@@ -1,0 +1,32 @@
+# 서버 포트 설정
+server:
+  port: 8080 # 기본 포트
+
+spring:
+  datasource:
+    # 데이터베이스 연결 URL (로컬 MySQL 기준)
+    url: jdbc:mysql://localhost:3306/taskflow?serverTimezone=Asia/Seoul
+    # 사용자 아이디
+    username: root
+    # 사용자 비밀번호
+    password: 1234
+
+jpa:
+  hibernate:
+    # 테이블 자동 생성 전략
+    ddl-auto: update # update : 기존 테이블 유지 + 필요한 부분만 변경
+    # 실행되는 SQL 쿼리 출력 여부
+    show-sql: true
+    properties:
+      hibernate:
+        # 쿼리를 예브게 출력
+        format_sql: true
+        # 컨트롤러나 뷰에서 DB에 영향을 주는 것은 차단하기 위해 영속성 컨테스트를 서비스 계층에서 닫음
+        open-in-view: false
+
+servlet:
+  multipart:
+    # 파일 업로드 최대 크기
+    max-file-size: 10MB
+    max-request-size: 10MB
+
