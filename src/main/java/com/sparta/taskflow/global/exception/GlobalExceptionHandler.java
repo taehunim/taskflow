@@ -1,5 +1,6 @@
 package com.sparta.taskflow.global.exception;
 
+import com.sparta.taskflow.response.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -16,7 +17,7 @@ public class GlobalExceptionHandler {
 
     // 우리가 정의한 CustomException 처리
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity<ErrorResponseDto> handleCustomException(CustomException e) {
+    public ResponseEntity<ApiResponse<ErrorResponseDto>> handleCustomException(CustomException e) {
 
         ErrorCode errorCode = e.getErrorCode();
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(errorCode);
@@ -25,11 +26,11 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(errorCode.getStatus())
-                .body(errorResponseDto);
+                .body(ApiResponse.fail(errorResponseDto.getMessage(), errorResponseDto));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponseDto> handleValidationException(MethodArgumentNotValidException e) {
+    public ResponseEntity<ApiResponse<ErrorResponseDto>> handleValidationException(MethodArgumentNotValidException e) {
 
         ErrorCode errorCode = ErrorCode.VALIDATION_ERROR;
         String message;
@@ -50,12 +51,12 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(errorCode.getStatus())
-                .body(errorResponseDto);
+                .body(ApiResponse.fail(errorResponseDto.getMessage(), errorResponseDto));
     }
 
     // 예상하지 못한 예외 처리
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponseDto> handleException(Exception e) {
+    public ResponseEntity<ApiResponse<ErrorResponseDto>> handleException(Exception e) {
 
         log.error("[알 수 없는 에러 발생]", e);
 
@@ -64,6 +65,6 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(unexpectedError.getStatus())
-                .body(errorResponseDto);
+                .body(ApiResponse.fail(errorResponseDto.getMessage(), errorResponseDto));
     }
 }
