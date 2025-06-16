@@ -8,17 +8,17 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
   datasource:
     # 데이터베이스 연결 URL (로컬 MySQL 기준)
-    url: jdbc:mysql://localhost:3306/outsourcing
+    url: jdbc:mysql://localhost:3306/${DB_NAME}
     # 사용자 아이디
-    username: root
+    username: ${DB_USERNAME}
     # 사용자 비밀번호
-    password: 1234
+    password: ${DB_PASSWORD}
 
-jpa:
-  hibernate:
-    # 테이블 자동 생성 전략
-    ddl-auto: update # update : 기존 테이블 유지 + 필요한 부분만 변경
-    # 실행되는 SQL 쿼리 출력 여부
+  jpa:
+    hibernate:
+      # 테이블 자동 생성 전략
+      ddl-auto: ${DDL_STRATEGY} # update : 기존 테이블 유지 + 필요한 부분만 변경
+      # 실행되는 SQL 쿼리 출력 여부
     show-sql: true
     properties:
       hibernate:
