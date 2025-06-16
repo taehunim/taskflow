@@ -1,4 +1,4 @@
-package com.sparta.taskflow.global.config;
+package com.sparta.taskflow.global.entity;
 
 
 import jakarta.persistence.Column;
