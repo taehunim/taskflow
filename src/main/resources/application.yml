@@ -4,8 +4,8 @@ server:
 
 spring:
   jackson:
-    time-zone: Asia/Seoul
-    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: UTC
+    date-format: com.fasterxml.jackson.databind.util.StdDateFormat
   datasource:
     # 데이터베이스 연결 URL (로컬 MySQL 기준)
     url: jdbc:mysql://localhost:3306/taskflow?serverTimezone=Asia/Seoul
