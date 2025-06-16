@@ -26,18 +26,26 @@ public class Task extends BaseTimeEntity {
 
     @Column(nullable = false)
     private String title;
+
     private String description;
+
     @Column(nullable = false)
     private String priority;
+
     private String status;
+
     @Column(name = "assignee_id")
     private Long assigneeId;
+
     @Column(name = "start_at")
     private LocalDateTime startAt;
+
     @Column(name = "due_at")
     private LocalDateTime dueAt;
+
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;
+
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 

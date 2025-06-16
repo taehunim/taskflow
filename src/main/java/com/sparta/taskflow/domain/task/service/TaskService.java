@@ -17,10 +17,6 @@ public class TaskService {
 
     public CreateTaskResponseDto createTask(CreateTaskRequestDto requestDto) {
 
-        if (requestDto.getTitle() == null || requestDto.getTitle().isBlank()) {
-            throw new CustomException(ErrorCode.VALIDATION_ERROR);
-        }
-
         Task task = Task.builder()
                 .title(requestDto.getTitle())
                 .description(requestDto.getDescription())
@@ -33,6 +29,7 @@ public class TaskService {
 
         Task savedTask = taskRepository.save(task);
 
+        // TODO : USER ENTITY 생성 후 수정
         return CreateTaskResponseDto.of(savedTask, "담당자");
     }
 }
