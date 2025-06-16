@@ -1,5 +1,6 @@
 package com.sparta.taskflow.global.exception;
 
+import com.sparta.taskflow.response.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -25,7 +26,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(errorCode.getStatus())
-                .body(errorResponseDto);
+                .body(ApiResponse.fail(errorResponseDto.getMessage(), errorResponseDto));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
