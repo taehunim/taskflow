@@ -4,9 +4,7 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 /**
- * 모든 예외 상황을 Enum으로 구성하여
- * HTTP 상태코드와 에러 내용을
- * 명확하게 정의한다
+ * 모든 예외 상황을 Enum으로 구성하여 HTTP 상태코드와 에러 내용을 명확하게 정의한다
  */
 @Getter
 public enum ErrorCode {
@@ -20,7 +18,8 @@ public enum ErrorCode {
 
     // User 관련 에러 정의
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."),
-    DUPLICATE_USERNAME(HttpStatus.CONFLICT, "이미 사용 중 인 사용자 이름입니다");
+    DUPLICATE_USERNAME(HttpStatus.BAD_REQUEST, "이미 존재하는 사용자명입니다."),
+    DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다.");
 
     // 필드
     // HTTP 상태코드

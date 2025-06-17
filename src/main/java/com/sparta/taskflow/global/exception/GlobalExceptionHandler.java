@@ -25,12 +25,13 @@ public class GlobalExceptionHandler {
         log.warn("[클라이언트 예외 발생] {} - {}", errorCode.name(), errorCode.getMessage());
 
         return ResponseEntity
-                .status(errorCode.getStatus())
-                .body(ApiResponse.fail(errorResponseDto.getMessage(), errorResponseDto));
+            .status(errorCode.getStatus())
+            .body(ApiResponse.fail(errorResponseDto.getMessage(), errorResponseDto));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse<ErrorResponseDto>> handleValidationException(MethodArgumentNotValidException e) {
+    public ResponseEntity<ApiResponse<ErrorResponseDto>> handleValidationException(
+        MethodArgumentNotValidException e) {
 
         ErrorCode errorCode = ErrorCode.VALIDATION_ERROR;
         String message;
@@ -45,13 +46,13 @@ public class GlobalExceptionHandler {
         log.warn("[벨리데이션 예외 발생] {} - {}", errorCode.name(), message);
 
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(
-                errorCode.getStatus().value(),
-                errorCode.name(),
-                message);
+            errorCode.getStatus().value(),
+            errorCode.name(),
+            message);
 
         return ResponseEntity
-                .status(errorCode.getStatus())
-                .body(ApiResponse.fail(errorResponseDto.getMessage(), errorResponseDto));
+            .status(errorCode.getStatus())
+            .body(ApiResponse.fail(errorResponseDto.getMessage(), errorResponseDto));
     }
 
     // 예상하지 못한 예외 처리
@@ -64,7 +65,7 @@ public class GlobalExceptionHandler {
         ErrorResponseDto errorResponseDto = new ErrorResponseDto(unexpectedError);
 
         return ResponseEntity
-                .status(unexpectedError.getStatus())
-                .body(ApiResponse.fail(errorResponseDto.getMessage(), errorResponseDto));
+            .status(unexpectedError.getStatus())
+            .body(ApiResponse.fail(errorResponseDto.getMessage(), errorResponseDto));
     }
 }
