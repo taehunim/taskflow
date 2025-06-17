@@ -1,5 +1,6 @@
 package com.sparta.taskflow.domain.comment.entity;
 
+import com.sparta.taskflow.domain.task.entity.Task;
 import com.sparta.taskflow.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,8 +16,12 @@ public class Comment extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 연관관계 관련 논의 후 수정
     private String content;
+
+    // TODO : task entity 생성 후 수정 예정
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "task_id", nullable = false)
+    // private Task task;
 
     private Long taskId;
 
