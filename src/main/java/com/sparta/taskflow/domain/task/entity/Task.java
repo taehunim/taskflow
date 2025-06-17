@@ -1,5 +1,6 @@
 package com.sparta.taskflow.domain.task.entity;
 
+import com.sparta.taskflow.domain.user.entity.User;
 import com.sparta.taskflow.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,10 +21,6 @@ public class Task extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-   // @ManyToOne(fetch = FetchType.LAZY)
-    //@JoinColumn(name = "creator_id", nullable = false)
-    //private User creator;
-
     @Column(nullable = false)
     private String title;
 
@@ -34,14 +31,15 @@ public class Task extends BaseTimeEntity {
 
     private String status;
 
-    @Column(name = "assignee_id")
-    private Long assigneeId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "assignee_id", nullable = false)
+    private User assignee;
 
-    @Column(name = "start_at")
-    private LocalDateTime startAt;
+    @Column(name = "start_date")
+    private LocalDateTime startDate;
 
-    @Column(name = "due_at")
-    private LocalDateTime dueAt;
+    @Column(name = "due_date")
+    private LocalDateTime dueDate;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;
