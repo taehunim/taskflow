@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class CommentRequestDto {
+public class CreateCommentRequestDto {
 
     private String content;
     private Long taskId;

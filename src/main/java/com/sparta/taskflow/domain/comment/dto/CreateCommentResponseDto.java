@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class CommentResponseDto {
+public class CreateCommentResponseDto {
 
     private Long id;
     private String content;
@@ -15,8 +15,8 @@ public class CommentResponseDto {
     private Long userId;
     private LocalDateTime createdAt;
 
-    public static CommentResponseDto of(Comment comment) {
-        return CommentResponseDto.builder()
+    public static CreateCommentResponseDto of(Comment comment) {
+        return CreateCommentResponseDto.builder()
                                  .id(comment.getId())
                                  .content(comment.getContent())
                                  .taskId(comment.getTaskId())
