@@ -8,12 +8,9 @@ import com.sparta.taskflow.domain.task.service.TaskService;
 import com.sparta.taskflow.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,16 +43,36 @@ public class TaskController {
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,
         @RequestParam(defaultValue = "createdAt,asc") String sort,
-        @RequestParam(required = false, defaultValue = "") String status,
-        @RequestParam(required = false, defaultValue = "") String title,
-        @RequestParam(required = false, defaultValue = "") String description
+        @RequestParam(required = false) String status,
+        @RequestParam(required = false) String search,
+        @RequestParam(required = false) Long assigneeId
     ) {
 
-        TaskListResponseDto taskList = taskService.getTasks(page, size, sort, status, title, description);
-        ApiResponse<TaskListResponseDto> response = ApiResponse.success("테스크 목록을 조회했습니다.", taskList);
+        TaskListResponseDto taskList = taskService.getTasks(page, size, sort, status, search, assigneeId);
+        ApiResponse<TaskListResponseDto> response = ApiResponse.success(
+            "Task 목록을 조회했습니다.",
+            taskList
+        );
 
         return ResponseEntity.ok(response);
 
     }
+
+    @GetMapping("/{taskId}")
+    public ResponseEntity<ApiResponse<TaskResponseDto>> getTask(
+        @PathVariable Long taskId
+    ) {
+
+        TaskResponseDto responseDto = taskService.getTask(taskId);
+        ApiResponse<TaskResponseDto> response = ApiResponse.success(
+            "테스크를 조회했습니다.",
+            responseDto
+        );
+
+        return ResponseEntity.ok(response);
+
+    }
+
+
 
 }
