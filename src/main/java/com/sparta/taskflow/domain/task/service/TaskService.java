@@ -63,7 +63,7 @@ public class TaskService {
 
     private Pageable createPageable(int page, int size, String sort) {
         if (sort == null || !sort.contains(",")) {
-            return PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
+            return PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         }
 
         String[] sortParams = sort.split(",");
