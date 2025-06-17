@@ -42,14 +42,7 @@ public class TaskService {
 
     public TaskListResponseDto getTasks(int page, int size, String sort, String status, String title, String description) {
 
-        String[] sortParams = sort.split(",");
-        Sort.Direction direction = Sort.Direction.fromString(sortParams[1]);
-        String sortBy = sortParams[0];
-        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
-
-        status = (status == null || status.isBlank()) ? "" : status;
-        title = (title == null || title.isBlank()) ? "" : title;
-        description = (description == null || description.isBlank()) ? "" : description;
+        Pageable pageable = createPageable(page, size, sort);
 
         Page<Task> tasks = taskRepository.findByStatusContainingIgnoreCaseAndTitleContainingIgnoreCaseAndDescriptionContainingIgnoreCase(
             status, title, description, pageable
@@ -66,6 +59,18 @@ public class TaskService {
 
         return TaskListResponseDto.of(new PageImpl<>(taskDtos, pageable, tasks.getTotalElements()), sort);
 
+    }
+
+    private Pageable createPageable(int page, int size, String sort) {
+        if (sort == null || !sort.contains(",")) {
+            return PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
+        }
+
+        String[] sortParams = sort.split(",");
+        String sortBy = sortParams[0].trim();
+        Sort.Direction direction = Sort.Direction.fromString(sortParams[1].trim().toUpperCase());
+
+        return PageRequest.of(page, size, Sort.by(direction, sortBy));
     }
 
 }

@@ -46,9 +46,9 @@ public class TaskController {
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,
         @RequestParam(defaultValue = "createdAt,asc") String sort,
-        @RequestParam(required = false) String status,
-        @RequestParam(required = false) String title,
-        @RequestParam(required = false) String description
+        @RequestParam(required = false, defaultValue = "") String status,
+        @RequestParam(required = false, defaultValue = "") String title,
+        @RequestParam(required = false, defaultValue = "") String description
     ) {
 
         TaskListResponseDto taskList = taskService.getTasks(page, size, sort, status, title, description);
