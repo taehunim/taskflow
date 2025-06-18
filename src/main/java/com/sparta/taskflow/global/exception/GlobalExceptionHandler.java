@@ -1,5 +1,6 @@
 package com.sparta.taskflow.global.exception;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.sparta.taskflow.response.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -60,8 +61,17 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<ErrorResponseDto>> handleHttpMessageNotReadable(HttpMessageNotReadableException e) {
 
         ErrorCode errorCode = ErrorCode.INVALID_REQUEST;
-        String message = "유효하지 않은 Enum값입니다.";
+        String message = "데이터 형식이 올바르지 않습니다.";
 
+        if (e.getCause() instanceof InvalidFormatException cause) {
+            Class<?> targetType = cause.getTargetType();
+
+            if (targetType.isEnum()) {
+                message = "유효하지 않은 Enum값입니다.";
+            } else {
+                message = "데이터 형식이 올바르지 않습니다.";
+            }
+        }
 
         log.warn("[JSON 파싱 예외 발생] {} - {}", errorCode.name(), e.getMessage());
 

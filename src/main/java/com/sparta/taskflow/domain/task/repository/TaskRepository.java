@@ -16,11 +16,12 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     @Query("""
     SELECT t 
     FROM Task t
-    WHERE (:status IS NULL OR t.status = :status)
+    WHERE t.isDeleted = false
+    AND (:status IS NULL OR t.status = :status)
     AND (:assigneeId IS NULL OR t.assignee.id = :assigneeId)
     AND (:search IS NULL OR 
-    LOWER(t.title) LIKE LOWER(CONCAT('%', :search, '%')) OR
-    LOWER(t.description) LIKE LOWER(CONCAT('%', :search, '%')))
+         LOWER(t.title) LIKE LOWER(CONCAT('%', :search, '%')) OR
+         LOWER(t.description) LIKE LOWER(CONCAT('%', :search, '%')))
     """)
     Page<Task> findAllByFilters(
         @Param("status") StatusType status,

@@ -101,6 +101,7 @@ public class TaskController {
         @PathVariable Long taskId,
         @Valid @RequestBody UpdateTaskStatusRequestDto requestDto
     ) {
+
         TaskResponseDto responseDto = taskService.updateStatus(taskId, requestDto.getStatus());
 
         ApiResponse<TaskResponseDto> response = ApiResponse.success(
@@ -109,6 +110,7 @@ public class TaskController {
         );
 
         return ResponseEntity.ok(response);
+
     }
 
     @DeleteMapping("/{taskId}")
