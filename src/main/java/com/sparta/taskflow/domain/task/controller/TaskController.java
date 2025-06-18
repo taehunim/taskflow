@@ -13,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,7 +39,7 @@ public class TaskController {
 
         CreateTaskResponseDto responseDto = taskService.createTask(requestDto);
         ApiResponse<CreateTaskResponseDto> response = ApiResponse.success(
-                "테스크가 생성되었습니다.",
+                "Task가 생성되었습니다.",
                 responseDto
         );
 
@@ -69,7 +71,7 @@ public class TaskController {
 
         TaskResponseDto responseDto = taskService.getTask(taskId);
         ApiResponse<TaskResponseDto> response = ApiResponse.success(
-            "테스크를 조회했습니다.",
+            "Task를 조회했습니다.",
             responseDto
         );
 
@@ -85,12 +87,26 @@ public class TaskController {
 
         TaskResponseDto responseDto = taskService.updateTask(taskId, requestDto);
         ApiResponse<TaskResponseDto> response = ApiResponse.success(
-            "테스크를 수정했습니다.",
+            "Task가 수정되었습니다.",
             responseDto
         );
 
         return ResponseEntity.ok(response);
 
+    }
+
+    @DeleteMapping("/{taskId}")
+    public ResponseEntity<ApiResponse<Void>> deleteTask(
+        @PathVariable Long taskId
+    ) {
+
+        taskService.deleteTask(taskId);
+        ApiResponse<Void> response = ApiResponse.success(
+            "Task가 삭제되었습니다.",
+            null
+        );
+
+        return ResponseEntity.ok(response);
     }
 
 }

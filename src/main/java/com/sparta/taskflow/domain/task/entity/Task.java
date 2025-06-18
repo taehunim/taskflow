@@ -62,4 +62,11 @@ public class Task extends BaseTimeEntity {
 
     }
 
+    public void softDelete() {
+
+        this.isDeleted = true;
+        this.deletedAt = LocalDateTime.now();
+
+    }
+
 }

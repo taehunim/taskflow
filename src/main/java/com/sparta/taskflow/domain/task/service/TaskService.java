@@ -101,4 +101,15 @@ public class TaskService {
 
     }
 
+    public void deleteTask(Long taskId) {
+
+        Task task = taskRepository.findById(taskId)
+                                  .orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
+
+        task.softDelete();
+
+        taskRepository.save(task);
+
+    }
+
 }
