@@ -6,6 +6,7 @@ import com.sparta.taskflow.domain.activitylog.repository.ActivityLogRepository;
 import com.sparta.taskflow.domain.comment.dto.CreateCommentResponseDto;
 import com.sparta.taskflow.domain.task.dto.response.TaskResponseDto;
 import com.sparta.taskflow.response.ApiResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Component;
 public class ActivityLogAspect {
 
     private final ActivityLogRepository activityLogRepository;
+    private final HttpServletRequest request;
 
     @AfterReturning(pointcut = "@annotation(com.sparta.taskflow.domain.activitylog.aop.ActivityLoggable)", returning = "result")
     public void logActivity(JoinPoint joinPoint, Object result) {
