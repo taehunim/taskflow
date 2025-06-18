@@ -6,7 +6,6 @@ import com.sparta.taskflow.domain.activitylog.repository.ActivityLogRepository;
 import com.sparta.taskflow.domain.comment.dto.CreateCommentResponseDto;
 import com.sparta.taskflow.domain.task.dto.response.TaskResponseDto;
 import com.sparta.taskflow.response.ApiResponse;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +45,7 @@ public class ActivityLogAspect {
 
         Object[] args = joinPoint.getArgs();
 
-        if (activityType.getHaveTargetId()) {
+        if (activityType.getRequiredTargetId()) {
             targetId = extractTargetId(args, activityType); //파라미터에서 뽑아보고(args, activityType);
             if (targetId == null) {
                 targetId = extractTargetIdFromResult(result, activityType);
@@ -92,7 +91,7 @@ public class ActivityLogAspect {
     }
 
     private Long extractTargetId(Object[] args, ActivityType activityType) {
-        if (!activityType.getHaveTargetId()) {
+        if (!activityType.getRequiredTargetId()) {
             return null;
         }
         for (Object arg : args) {

@@ -14,13 +14,13 @@ public enum ActivityType {
     USER_LOGGED_IN(false),
     USER_LOGGED_OUT(false);
 
-    private final boolean haveTargetId;
+    private final boolean requiredTargetId;
 
     ActivityType(boolean havaTargetId) {
-        this.haveTargetId = havaTargetId;
+        this.requiredTargetId = havaTargetId;
     }
 
-    public boolean getHaveTargetId() {
-        return haveTargetId;
+    public boolean getRequiredTargetId() {
+        return requiredTargetId;
     }
 }
