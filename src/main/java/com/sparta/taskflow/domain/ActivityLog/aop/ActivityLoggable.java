@@ -12,7 +12,6 @@ import java.lang.annotation.Target;
  * AOP가 이 어노테이션을 통해 타입값을 읽고
  * 로그에 이 타입을 저장함
  */
-/
 @Target(ElementType.METHOD) // 메서드에만 적용
 @Retention(RetentionPolicy.RUNTIME) // 런타임까지 유지가 되야 AOP가 감지
 public @interface ActivityLoggable {
