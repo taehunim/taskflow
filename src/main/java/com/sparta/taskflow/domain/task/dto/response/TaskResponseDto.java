@@ -1,6 +1,8 @@
 package com.sparta.taskflow.domain.task.dto.response;
 
 import com.sparta.taskflow.domain.task.entity.Task;
+import com.sparta.taskflow.domain.task.type.PriorityType;
+import com.sparta.taskflow.domain.task.type.StatusType;
 import com.sparta.taskflow.domain.user.dto.UserSummaryDto;
 import com.sparta.taskflow.domain.user.dto.response.UserResponseDto;
 import java.time.LocalDateTime;
@@ -17,8 +19,8 @@ public class TaskResponseDto {
     private Long id;
     private String title;
     private String description;
-    private String priority;
-    private String status;
+    private PriorityType priority;
+    private StatusType status;
     private Long assigneeId;
     private UserSummaryDto assignee;
     private LocalDateTime dueDate;

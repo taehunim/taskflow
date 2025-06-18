@@ -6,6 +6,7 @@ import com.sparta.taskflow.domain.task.dto.response.CreateTaskResponseDto;
 import com.sparta.taskflow.domain.task.dto.response.TaskListResponseDto;
 import com.sparta.taskflow.domain.task.dto.response.TaskResponseDto;
 import com.sparta.taskflow.domain.task.service.TaskService;
+import com.sparta.taskflow.domain.task.type.StatusType;
 import com.sparta.taskflow.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +47,7 @@ public class TaskController {
     @GetMapping
     public ResponseEntity<ApiResponse<TaskListResponseDto>> getTasks(
         @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable,
-        @RequestParam(required = false) String status,
+        @RequestParam(required = false) StatusType status,
         @RequestParam(required = false) String search,
         @RequestParam(required = false) Long assigneeId
     ) {

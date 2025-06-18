@@ -1,5 +1,7 @@
 package com.sparta.taskflow.domain.task.entity;
 
+import com.sparta.taskflow.domain.task.type.PriorityType;
+import com.sparta.taskflow.domain.task.type.StatusType;
 import com.sparta.taskflow.domain.user.entity.User;
 import com.sparta.taskflow.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -27,9 +29,11 @@ public class Task extends BaseTimeEntity {
     private String description;
 
     @Column(nullable = false)
-    private String priority;
+    @Enumerated(EnumType.STRING)
+    private PriorityType priority;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private StatusType status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assignee_id", nullable = false)
@@ -47,7 +51,7 @@ public class Task extends BaseTimeEntity {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    public void update(String title, String description, LocalDateTime dueDate, String priority, String status, User assignee) {
+    public void update(String title, String description, LocalDateTime dueDate, PriorityType priority, StatusType status, User assignee) {
 
         this.title = title;
         this.description = description;

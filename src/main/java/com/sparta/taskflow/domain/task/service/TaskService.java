@@ -7,6 +7,7 @@ import com.sparta.taskflow.domain.task.dto.response.TaskListResponseDto;
 import com.sparta.taskflow.domain.task.dto.response.TaskResponseDto;
 import com.sparta.taskflow.domain.task.entity.Task;
 import com.sparta.taskflow.domain.task.repository.TaskRepository;
+import com.sparta.taskflow.domain.task.type.StatusType;
 import com.sparta.taskflow.domain.user.dto.UserSummaryDto;
 import com.sparta.taskflow.domain.user.dto.response.UserResponseDto;
 import com.sparta.taskflow.domain.user.entity.User;
@@ -43,7 +44,7 @@ public class TaskService {
                         .title(requestDto.getTitle())
                         .description(requestDto.getDescription())
                         .priority(requestDto.getPriority())
-                        .status("TODO")
+                        .status(StatusType.TODO)
                         .assignee(assignee)
                         .dueDate(requestDto.getDueDate())
                         .isDeleted(false)
@@ -55,7 +56,7 @@ public class TaskService {
 
     }
 
-    public TaskListResponseDto getTasks(Pageable pageable, String status, String search, Long assigneeId) {
+    public TaskListResponseDto getTasks(Pageable pageable, StatusType status, String search, Long assigneeId) {
 
         Page<Task> taskPage = taskRepository.findAllByFilters(
             status, search, assigneeId, pageable

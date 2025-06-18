@@ -1,5 +1,6 @@
 package com.sparta.taskflow.domain.task.dto.request;
 
+import com.sparta.taskflow.domain.task.type.PriorityType;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
@@ -12,11 +13,10 @@ public class CreateTaskRequestDto {
     private String title;
 
     private String description;
-
     private LocalDateTime dueDate;
 
     @NotNull(message = "우선순위는 필수입니다.")
-    private String priority;
+    private PriorityType priority;
 
     private Long assigneeId;
 }
