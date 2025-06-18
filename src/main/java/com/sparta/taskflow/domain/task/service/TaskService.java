@@ -1,6 +1,7 @@
 package com.sparta.taskflow.domain.task.service;
 
 import com.sparta.taskflow.domain.task.dto.request.CreateTaskRequestDto;
+import com.sparta.taskflow.domain.task.dto.request.UpdateTaskRequestDto;
 import com.sparta.taskflow.domain.task.dto.response.CreateTaskResponseDto;
 import com.sparta.taskflow.domain.task.dto.response.TaskListResponseDto;
 import com.sparta.taskflow.domain.task.dto.response.TaskResponseDto;
@@ -72,6 +73,28 @@ public class TaskService {
 
         Task task = taskRepository.findByIdAndIsDeletedFalse(taskId)
                                   .orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
+
+        return TaskResponseDto.of(task);
+
+    }
+
+    @Transactional
+    public TaskResponseDto updateTask(Long taskId, UpdateTaskRequestDto requestDto) {
+
+        Task task = taskRepository.findByIdAndIsDeletedFalse(taskId)
+                                  .orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
+
+        User assignee = userRepository.findByIdAndIsDeletedFalse(requestDto.getAssigneeId())
+                                      .orElseThrow(() -> new CustomException(ErrorCode.ASSIGNEE_NOT_FOUND));
+
+        task.update(
+            requestDto.getTitle(),
+            requestDto.getDescription(),
+            requestDto.getDueDate(),
+            requestDto.getPriority(),
+            requestDto.getStatus(),
+            assignee
+        );
 
         return TaskResponseDto.of(task);
 
