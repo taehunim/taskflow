@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -41,5 +42,13 @@ public class CommentController {
     ) {
         List<CreateCommentResponseDto> responseDtoList = commentService.getCommentsByTask(taskId);
         return ResponseEntity.ok(ApiResponse.success("댓글을 조회했습니다.", responseDtoList));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<List<CreateCommentResponseDto>>> searchComments(
+        @RequestParam("keyword") String keyword
+    ) {
+        List<CreateCommentResponseDto> result = commentService.searchComments(keyword);
+        return ResponseEntity.ok(ApiResponse.success("댓글 검색 결과입니다.", result));
     }
 }

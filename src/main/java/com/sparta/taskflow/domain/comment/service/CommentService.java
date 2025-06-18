@@ -33,4 +33,13 @@ public class CommentService {
                        .map(CreateCommentResponseDto::of)
                        .collect(Collectors.toList());
     }
+
+    public List<CreateCommentResponseDto> searchComments(String keyword) {
+        List<Comment> comments = commentRepository
+            .findAllByContentContainingIgnoreCaseAndIsDeletedFalseOrderByCreatedAtDesc(keyword);
+
+        return comments.stream()
+                       .map(CreateCommentResponseDto::of)
+                       .collect(Collectors.toList());
+    }
 }
