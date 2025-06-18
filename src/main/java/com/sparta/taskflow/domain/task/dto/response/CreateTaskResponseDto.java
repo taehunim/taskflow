@@ -5,10 +5,9 @@ import com.sparta.taskflow.domain.task.type.PriorityType;
 import com.sparta.taskflow.domain.task.type.StatusType;
 import com.sparta.taskflow.domain.user.dto.UserSummaryDto;
 import com.sparta.taskflow.domain.user.entity.User;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Builder
@@ -33,13 +32,8 @@ public class CreateTaskResponseDto {
                                     .description(task.getDescription())
                                     .priority(task.getPriority())
                                     .status(task.getStatus())
-                                    .assigneeId(assignee.getId())
-                                    .assignee(UserSummaryDto.builder()
-                                                            .id(assignee.getId())
-                                                            .username(assignee.getUsername())
-                                                            .name(assignee.getName())
-                                                            .email(assignee.getEmail())
-                                                            .build())
+                                    .assigneeId(assignee != null ? assignee.getId() : null)
+                                    .assignee(assignee != null ? UserSummaryDto.of(assignee) : new UserSummaryDto())
                                     .dueDate(task.getDueDate())
                                     .createdAt(task.getCreatedAt())
                                     .updatedAt(task.getUpdatedAt())

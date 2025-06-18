@@ -8,22 +8,17 @@ import com.sparta.taskflow.domain.task.dto.response.TaskResponseDto;
 import com.sparta.taskflow.domain.task.entity.Task;
 import com.sparta.taskflow.domain.task.repository.TaskRepository;
 import com.sparta.taskflow.domain.task.type.StatusType;
-import com.sparta.taskflow.domain.user.dto.UserSummaryDto;
-import com.sparta.taskflow.domain.user.dto.response.UserResponseDto;
 import com.sparta.taskflow.domain.user.entity.User;
 import com.sparta.taskflow.domain.user.repository.UserRepository;
 import com.sparta.taskflow.global.exception.CustomException;
 import com.sparta.taskflow.global.exception.ErrorCode;
 import jakarta.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -36,9 +31,13 @@ public class TaskService {
     @Transactional
     public CreateTaskResponseDto createTask(CreateTaskRequestDto requestDto) {
 
-        User assignee = userRepository.findById(requestDto.getAssigneeId())
-                                      .filter(user -> !user.isDeleted())
-                                      .orElseThrow(() ->  new CustomException(ErrorCode.ASSIGNEE_NOT_FOUND));
+        User assignee = null;
+
+        if (requestDto.getAssigneeId() != null) {
+            assignee = userRepository.findById(requestDto.getAssigneeId())
+                                     .filter(user -> !user.isDeleted())
+                                     .orElseThrow(() -> new CustomException(ErrorCode.ASSIGNEE_NOT_FOUND));
+        }
 
         Task task = Task.builder()
                         .title(requestDto.getTitle())
