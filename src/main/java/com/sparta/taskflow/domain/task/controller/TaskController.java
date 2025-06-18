@@ -2,6 +2,7 @@ package com.sparta.taskflow.domain.task.controller;
 
 import com.sparta.taskflow.domain.task.dto.request.CreateTaskRequestDto;
 import com.sparta.taskflow.domain.task.dto.request.UpdateTaskRequestDto;
+import com.sparta.taskflow.domain.task.dto.request.UpdateTaskStatusRequestDto;
 import com.sparta.taskflow.domain.task.dto.response.CreateTaskResponseDto;
 import com.sparta.taskflow.domain.task.dto.response.TaskListResponseDto;
 import com.sparta.taskflow.domain.task.dto.response.TaskResponseDto;
@@ -13,10 +14,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -82,7 +83,7 @@ public class TaskController {
     @PutMapping("/{taskId}")
     public ResponseEntity<ApiResponse<TaskResponseDto>> updateTask(
         @PathVariable Long taskId,
-        @RequestBody UpdateTaskRequestDto requestDto
+        @Valid @RequestBody UpdateTaskRequestDto requestDto
     ) {
 
         TaskResponseDto responseDto = taskService.updateTask(taskId, requestDto);
@@ -93,6 +94,21 @@ public class TaskController {
 
         return ResponseEntity.ok(response);
 
+    }
+
+    @PatchMapping("/{taskId}/status")
+    public ResponseEntity<ApiResponse<TaskResponseDto>> updateTaskStatus(
+        @PathVariable Long taskId,
+        @Valid @RequestBody UpdateTaskStatusRequestDto requestDto
+    ) {
+        TaskResponseDto responseDto = taskService.updateStatus(taskId, requestDto.getStatus());
+
+        ApiResponse<TaskResponseDto> response = ApiResponse.success(
+            "작업 상태가 업데이트되었습니다.",
+            responseDto
+        );
+
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{taskId}")

@@ -23,7 +23,7 @@ public enum ErrorCode {
 
     // Task 관련 에러 정의
     ASSIGNEE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않거나 탈퇴된 담당자입니다."),
-    TASK_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 테스크가 존재하지 않습니다.");
+    TASK_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 ID의 작업을 찾을 수 없습니다.");
 
 
     // 필드

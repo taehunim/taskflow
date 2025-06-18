@@ -8,22 +8,17 @@ import com.sparta.taskflow.domain.task.dto.response.TaskResponseDto;
 import com.sparta.taskflow.domain.task.entity.Task;
 import com.sparta.taskflow.domain.task.repository.TaskRepository;
 import com.sparta.taskflow.domain.task.type.StatusType;
-import com.sparta.taskflow.domain.user.dto.UserSummaryDto;
-import com.sparta.taskflow.domain.user.dto.response.UserResponseDto;
 import com.sparta.taskflow.domain.user.entity.User;
 import com.sparta.taskflow.domain.user.repository.UserRepository;
 import com.sparta.taskflow.global.exception.CustomException;
 import com.sparta.taskflow.global.exception.ErrorCode;
 import jakarta.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -101,9 +96,19 @@ public class TaskService {
 
     }
 
+    @Transactional
+    public TaskResponseDto updateStatus(Long taskId, StatusType newStatus) {
+        Task task = taskRepository.findByIdAndIsDeletedFalse(taskId)
+                                  .orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
+
+        task.updateStatus(newStatus);
+
+        return TaskResponseDto.of(task);
+    }
+
     public void deleteTask(Long taskId) {
 
-        Task task = taskRepository.findById(taskId)
+        Task task = taskRepository.findByIdAndIsDeletedFalse(taskId)
                                   .orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
 
         task.softDelete();

@@ -62,6 +62,12 @@ public class Task extends BaseTimeEntity {
 
     }
 
+    public void updateStatus(StatusType status) {
+
+        this.status = status;
+
+    }
+
     public void softDelete() {
 
         this.isDeleted = true;
