@@ -4,6 +4,8 @@ import com.sparta.taskflow.domain.comment.dto.CreateCommentRequestDto;
 import com.sparta.taskflow.domain.comment.dto.CreateCommentResponseDto;
 import com.sparta.taskflow.domain.comment.entity.Comment;
 import com.sparta.taskflow.domain.comment.repository.CommentRepository;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,4 +26,11 @@ public class CommentService {
         return CreateCommentResponseDto.of(saved);
     }
 
+    public List<CreateCommentResponseDto> getCommentsByTask(Long taskId) {
+        List<Comment> comments = commentRepository.findAllByTaskIdAndIsDeletedFalseOrderByCreatedAtDesc(
+            taskId);
+        return comments.stream()
+                       .map(CreateCommentResponseDto::of)
+                       .collect(Collectors.toList());
+    }
 }

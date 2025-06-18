@@ -5,8 +5,11 @@ import com.sparta.taskflow.domain.comment.dto.CreateCommentResponseDto;
 import com.sparta.taskflow.domain.comment.service.CommentService;
 import com.sparta.taskflow.response.ApiResponse;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,5 +33,13 @@ public class CommentController {
         );
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/task/{taskId}")
+    public ResponseEntity<ApiResponse<List<CreateCommentResponseDto>>> getCommentsByTask(
+        @PathVariable Long taskId
+    ) {
+        List<CreateCommentResponseDto> responseDtoList = commentService.getCommentsByTask(taskId);
+        return ResponseEntity.ok(ApiResponse.success("댓글을 조회했습니다.", responseDtoList));
     }
 }
