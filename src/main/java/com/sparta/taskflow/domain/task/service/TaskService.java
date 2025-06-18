@@ -54,9 +54,8 @@ public class TaskService {
 
     }
 
-    public TaskListResponseDto getTasks(int page, int size, String sort, String status, String search, Long assigneeId) {
+    public TaskListResponseDto getTasks(Pageable pageable, String status, String search, Long assigneeId) {
 
-        Pageable pageable = createPageable(page, size, sort);
         Page<Task> taskPage = taskRepository.findAllByFilters(
             status, search, assigneeId, pageable
         );
@@ -75,20 +74,6 @@ public class TaskService {
                                   .orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
 
         return TaskResponseDto.of(task);
-
-    }
-
-    private Pageable createPageable(int page, int size, String sort) {
-
-        if (sort == null || !sort.contains(",")) {
-            return PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-        }
-
-        String[] sortParams = sort.split(",");
-        String sortBy = sortParams[0].trim();
-        Sort.Direction direction = Sort.Direction.fromString(sortParams[1].trim().toUpperCase());
-
-        return PageRequest.of(page, size, Sort.by(direction, sortBy));
 
     }
 
