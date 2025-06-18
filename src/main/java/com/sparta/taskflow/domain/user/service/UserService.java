@@ -13,7 +13,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     public UserResponseDto getUser(Long loginUserId) {
-        User findUser = userRepository.findByIdOrElseThrow(loginUserId);
-        return UserResponseDto.of(findUser);
+        User foundUser = userRepository.findByIdOrElseThrow(loginUserId);
+        return UserResponseDto.of(foundUser);
     }
 }
