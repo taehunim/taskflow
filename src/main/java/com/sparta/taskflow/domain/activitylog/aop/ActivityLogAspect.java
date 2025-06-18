@@ -63,8 +63,7 @@ public class ActivityLogAspect {
                 method,
                 url,
                 ipAddress,
-                content,
-                LocalDateTime.now()
+                content;
         );
         activityLogRepository.save(activityLog);
         log.info("활동 로그 저장됨: {}", activityLog);

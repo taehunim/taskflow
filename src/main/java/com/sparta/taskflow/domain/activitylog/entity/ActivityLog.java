@@ -4,6 +4,7 @@ import com.sparta.taskflow.domain.activitylog.Enum.ActivityType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -23,27 +24,28 @@ public class ActivityLog {
     @Column(nullable = false)
     private ActivityType activityType; // 활동 유형
 
-    @Column(nullable = false)
+    @Column(nullable = true, updatable = false)
     private Long targetId; // 작업, 댓글, 유저 아이디 무엇을?
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private String method;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private String url; // 요청 URL
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private String ipAddress; // Ip 주소
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT", nullable = true, updatable = false)
     private String content;
 
+    @CreationTimestamp
     @Column(nullable = false)
-    private LocalDateTime timestamp;
+    private LocalDateTime createdAt;
 
     public ActivityLog(Long userId, ActivityType activityType, Long targetId,
                        String method, String url, String ipAddress,
-                       String content, LocalDateTime timestamp) {
+                       String content) {
         this.userId = userId;
         this.activityType = activityType;
         this.targetId = targetId;
@@ -51,6 +53,5 @@ public class ActivityLog {
         this.url = url;
         this.ipAddress = ipAddress;
         this.content = content;
-        this.timestamp = timestamp;
     }
 }
