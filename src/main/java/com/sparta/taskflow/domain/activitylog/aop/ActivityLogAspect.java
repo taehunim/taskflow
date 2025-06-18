@@ -6,7 +6,6 @@ import com.sparta.taskflow.domain.activitylog.repository.ActivityLogRepository;
 import com.sparta.taskflow.domain.comment.dto.CreateCommentResponseDto;
 import com.sparta.taskflow.domain.task.dto.response.TaskResponseDto;
 import com.sparta.taskflow.response.ApiResponse;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -17,8 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
 
 /**
  * Advice + Pointcut
@@ -31,7 +28,6 @@ import java.time.LocalDateTime;
 public class ActivityLogAspect {
 
     private final ActivityLogRepository activityLogRepository;
-    private final HttpServletRequest request;
 
     @AfterReturning(pointcut = "@annotation(com.sparta.taskflow.domain.activitylog.aop.ActivityLoggable)", returning = "result")
     public void logActivity(JoinPoint joinPoint, Object result) {
@@ -55,6 +51,7 @@ public class ActivityLogAspect {
         String url = request.getRequestURI();
         String method = request.getMethod();
         String ipAddress = request.getRemoteAddr();
+        String content = activityType.name() + "수행함";
 
         ActivityLog activityLog = new ActivityLog(
                 userID,
@@ -63,7 +60,7 @@ public class ActivityLogAspect {
                 method,
                 url,
                 ipAddress,
-                content;
+                content
         );
         activityLogRepository.save(activityLog);
         log.info("활동 로그 저장됨: {}", activityLog);

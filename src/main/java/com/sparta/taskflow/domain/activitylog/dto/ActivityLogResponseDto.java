@@ -15,9 +15,10 @@ public class ActivityLogResponseDto {
     private String url;
     private String ipAddress;
     private String content;
-    private LocalDateTime timestamp;
+    private LocalDateTime createdAt;
 
     public ActivityLogResponseDto(ActivityLog log) {
+        this.id = log.getId();
         this.userId = log.getUserId();
         this.activityType = log.getActivityType();
         this.targetId = log.getTargetId();
@@ -25,6 +26,6 @@ public class ActivityLogResponseDto {
         this.url = log.getUrl();
         this.ipAddress = log.getIpAddress();
         this.content = log.getContent();
-        this.timestamp = log.getTimestamp();
+        this.createdAt = log.getCreatedAt();
     }
 }
