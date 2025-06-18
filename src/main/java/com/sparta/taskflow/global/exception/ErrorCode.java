@@ -19,7 +19,12 @@ public enum ErrorCode {
     // User 관련 에러 정의
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."),
     DUPLICATE_USERNAME(HttpStatus.BAD_REQUEST, "이미 존재하는 사용자명입니다."),
-    DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다.");
+    DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다."),
+
+    // Task 관련 에러 정의
+    ASSIGNEE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않거나 탈퇴된 담당자입니다."),
+    TASK_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 테스크가 존재하지 않습니다.");
+
 
     // 필드
     // HTTP 상태코드
