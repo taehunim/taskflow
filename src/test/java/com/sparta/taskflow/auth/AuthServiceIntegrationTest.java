@@ -4,13 +4,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
 import com.sparta.taskflow.auth.dto.request.RegisterRequestDto;
+import com.sparta.taskflow.auth.dto.response.TokenResponse;
 import com.sparta.taskflow.auth.service.AuthService;
 import com.sparta.taskflow.domain.user.dto.response.UserResponseDto;
+import com.sparta.taskflow.domain.user.entity.User;
+import com.sparta.taskflow.domain.user.repository.UserRepository;
+import com.sparta.taskflow.domain.user.type.RoleType;
 import com.sparta.taskflow.global.exception.CustomException;
 import com.sparta.taskflow.global.exception.ErrorCode;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +27,12 @@ class AuthServiceIntegrationTest {
 
     @Autowired
     AuthService authService;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Test
     void 정상_회원가입() {
@@ -69,6 +80,39 @@ class AuthServiceIntegrationTest {
             .isInstanceOf(CustomException.class);
         CustomException exception = (CustomException) thrown;
         assertThat(exception.getErrorCode()).isEqualTo(ErrorCode.DUPLICATE_USERNAME);
+    }
+
+    @Test
+    void 가입회원_로그인_토큰반환() {
+        // given
+        String encodedPassword = passwordEncoder.encode("password");
+        User registeredUser = new User();
+        ReflectionTestUtils.setField(registeredUser, "username", "username");
+        ReflectionTestUtils.setField(registeredUser, "password", encodedPassword);
+        ReflectionTestUtils.setField(registeredUser, "role", RoleType.USER);
+        userRepository.save(registeredUser);
+
+        // when
+        TokenResponse tokenResponse = authService.login("username", "password");
+
+        // then
+        String jwt = tokenResponse.getToken();
+        assertThat(jwt).isNotNull();
+        System.out.println(jwt);
+    }
+
+    @Test
+    void 가입하지_않은_사용자_로그인_실패() {
+        // given
+
+        // when
+        Throwable thrown = catchThrowable(() -> authService.login("username", "password"));
+
+        // then
+        assertThat(thrown)
+            .isInstanceOf(CustomException.class);
+        CustomException exception = (CustomException) thrown;
+        assertThat(exception.getErrorCode()).isEqualTo(ErrorCode.INVALID_CREDENTIALS);
     }
 
     private static RegisterRequestDto getRegisterRequestDto(String email, String username) {
