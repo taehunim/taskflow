@@ -1,6 +1,6 @@
-package com.sparta.taskflow.domain.ActivityLog.aop;
+package com.sparta.taskflow.domain.activitylog.aop;
 
-import com.sparta.taskflow.domain.ActivityLog.Enum.ActivityType;
+import com.sparta.taskflow.domain.activitylog.Enum.ActivityType;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

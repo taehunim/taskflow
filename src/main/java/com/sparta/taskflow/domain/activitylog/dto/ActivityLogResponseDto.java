@@ -1,8 +1,7 @@
-package com.sparta.taskflow.domain.ActivityLog.dto;
+package com.sparta.taskflow.domain.activitylog.dto;
 
-import com.sparta.taskflow.domain.ActivityLog.Enum.ActivityType;
-import com.sparta.taskflow.domain.ActivityLog.entity.ActivityLog;
-import jakarta.persistence.*;
+import com.sparta.taskflow.domain.activitylog.Enum.ActivityType;
+import com.sparta.taskflow.domain.activitylog.entity.ActivityLog;
 
 import java.time.LocalDateTime;
 

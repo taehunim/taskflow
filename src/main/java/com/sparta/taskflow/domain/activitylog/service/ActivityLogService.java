@@ -1,9 +1,9 @@
-package com.sparta.taskflow.domain.ActivityLog.service;
+package com.sparta.taskflow.domain.activitylog.service;
 
-import com.sparta.taskflow.domain.ActivityLog.Enum.ActivityType;
-import com.sparta.taskflow.domain.ActivityLog.dto.ActivityLogResponseDto;
-import com.sparta.taskflow.domain.ActivityLog.entity.ActivityLog;
-import com.sparta.taskflow.domain.ActivityLog.repository.ActivityLogRepository;
+import com.sparta.taskflow.domain.activitylog.Enum.ActivityType;
+import com.sparta.taskflow.domain.activitylog.dto.ActivityLogResponseDto;
+import com.sparta.taskflow.domain.activitylog.entity.ActivityLog;
+import com.sparta.taskflow.domain.activitylog.repository.ActivityLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ public class ActivityLogService {
 
     public final ActivityLogRepository activityLogRepository;
 
-    public List<ActivityLogResponseDto> getLogsByFillter(
+    public List<ActivityLogResponseDto> getLogsByFilter(
             Long userId,
             ActivityType activityType,
             Long targetId,

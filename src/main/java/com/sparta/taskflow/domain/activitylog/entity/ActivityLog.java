@@ -1,6 +1,6 @@
-package com.sparta.taskflow.domain.ActivityLog.entity;
+package com.sparta.taskflow.domain.activitylog.entity;
 
-import com.sparta.taskflow.domain.ActivityLog.Enum.ActivityType;
+import com.sparta.taskflow.domain.activitylog.Enum.ActivityType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

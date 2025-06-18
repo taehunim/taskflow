@@ -1,4 +1,4 @@
-package com.sparta.taskflow.domain.ActivityLog.Enum;
+package com.sparta.taskflow.domain.activitylog.Enum;
 
 public enum ActivityType {
 
