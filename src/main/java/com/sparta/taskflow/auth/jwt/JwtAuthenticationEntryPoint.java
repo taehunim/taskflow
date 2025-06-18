@@ -27,7 +27,12 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response,
         AuthenticationException authException) throws IOException, ServletException {
 
-        ApiResponse apiResponse = ApiResponse.fail("인증이 필요합니다", null);
+        String errorMessage = (String) request.getAttribute("jwt.message");
+        if(errorMessage == null) {
+            errorMessage = "인증이 필요합니다.";
+        }
+
+        ApiResponse apiResponse = ApiResponse.fail(errorMessage, null);
 
         response.setStatus(401);
         response.setContentType("application/json;charset=UTF-8");

@@ -1,6 +1,7 @@
 package com.sparta.taskflow.auth.jwt;
 
 import com.sparta.taskflow.domain.user.type.RoleType;
+import com.sparta.taskflow.global.exception.JwtAuthenticationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -48,26 +49,26 @@ public class JwtUtil {
                    .signWith(key, ALGORITHM).compact();
     }
 
-    public boolean validateToken(String token) {
+    public void validateToken(String token) {
         try {
             parseClaims(token);
-            return true;
-        } catch (ExpiredJwtException e) {       // 토큰이 만료된 경우
-            log.error("만료된 토큰입니다.", e);
-        } catch (SignatureException e) {        // 토큰 서명이 잘못된 경우
-            log.error("서명이 유효하지 않은 토큰입니다.", e);
-        } catch (MalformedJwtException | UnsupportedJwtException |
-                 SecurityException e) {     // 잘못된 형식의 토큰이 전달된 경우
-            log.error("잘못된 형식의 토큰입니다.", e);
-        } catch (IllegalArgumentException e) {  // 토큰이 없는 경우
-            log.error("잘못된 토큰입니다.", e);
+        } catch (ExpiredJwtException e) {
+            throw new JwtAuthenticationException("TOKEN_EXPIRED", "JWT 토큰이 만료되었습니다.");
+        } catch (MalformedJwtException | SignatureException e) {
+            throw new JwtAuthenticationException("INVALID_TOKEN", "잘못된 JWT 토큰입니다.");
+        } catch (UnsupportedJwtException e) {
+            throw new JwtAuthenticationException("UNSUPPORTED_TOKEN", "지원하지 않는 JWT 토큰입니다.");
+        } catch (IllegalArgumentException e) {
+            throw new JwtAuthenticationException("EMPTY_TOKEN", "JWT 클레임이 비어있습니다.");
         }
-
-        return false;
     }
 
     public String getTokenFromRequest(HttpServletRequest request) {
-        return request.getHeader("Authorization").substring(7);
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
     }
 
     public String extractUserIdFromToken(String token) {

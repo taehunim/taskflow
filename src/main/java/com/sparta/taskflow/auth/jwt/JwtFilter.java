@@ -1,5 +1,6 @@
 package com.sparta.taskflow.auth.jwt;
 
+import com.sparta.taskflow.global.exception.JwtAuthenticationException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,13 +36,18 @@ public class JwtFilter extends OncePerRequestFilter {
          */
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            request.setAttribute("jwt.exception", "TOKEN_NOT_PROVIDED");
+            request.setAttribute("jwt.message", "JWT 토큰이 없습니다.");
             filterChain.doFilter(request, response);
             return;
         }
 
         String jwt = jwtUtil.getTokenFromRequest(request);
-        boolean isTokenInvalid = !jwtUtil.validateToken(jwt);
-        if (isTokenInvalid) {
+        try {
+            jwtUtil.validateToken(jwt);
+        } catch (JwtAuthenticationException e) {
+            request.setAttribute("jwt.exception", e.getErrorCode());
+            request.setAttribute("jwt.message", e.getMessage());
             filterChain.doFilter(request, response);
             return;
         }
