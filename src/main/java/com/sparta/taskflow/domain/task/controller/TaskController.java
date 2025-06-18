@@ -1,6 +1,7 @@
 package com.sparta.taskflow.domain.task.controller;
 
 import com.sparta.taskflow.domain.task.dto.request.CreateTaskRequestDto;
+import com.sparta.taskflow.domain.task.dto.request.UpdateTaskRequestDto;
 import com.sparta.taskflow.domain.task.dto.response.CreateTaskResponseDto;
 import com.sparta.taskflow.domain.task.dto.response.TaskListResponseDto;
 import com.sparta.taskflow.domain.task.dto.response.TaskResponseDto;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -74,6 +76,20 @@ public class TaskController {
 
     }
 
+    @PutMapping("/{taskId}")
+    public ResponseEntity<ApiResponse<TaskResponseDto>> updateTask(
+        @PathVariable Long taskId,
+        @RequestBody UpdateTaskRequestDto requestDto
+    ) {
 
+        TaskResponseDto responseDto = taskService.updateTask(taskId, requestDto);
+        ApiResponse<TaskResponseDto> response = ApiResponse.success(
+            "테스크를 수정했습니다.",
+            responseDto
+        );
+
+        return ResponseEntity.ok(response);
+
+    }
 
 }
