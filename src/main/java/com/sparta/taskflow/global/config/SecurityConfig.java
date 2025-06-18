@@ -28,8 +28,10 @@ public class SecurityConfig {
                 ex.authenticationEntryPoint(jwtAuthenticationEntryPoint);
             })
             .authorizeHttpRequests(auth -> {
-                auth.requestMatchers("/api/auth/login", "api/auth/register").permitAll()
-                    .anyRequest().authenticated();
+                auth
+//                    .requestMatchers("/api/auth/login", "api/auth/register").permitAll()
+//                    .anyRequest().authenticated()
+                    .anyRequest().permitAll(); // Todo: 개발 환경에서 인증 사용 x, 실제 동작 시 위 주석 해제
             })
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
