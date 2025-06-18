@@ -16,5 +16,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME) // 런타임까지 유지가 되야 AOP가 감지
 public @interface ActivityLoggable {
     ActivityType value(); // 어떤 활동 타입인지 반드시 지정해줘야한다
+
 }
 

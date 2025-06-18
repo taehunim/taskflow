@@ -17,14 +17,14 @@ public class ActivityLog {
     private Long id;
 
     @Column(nullable = false)
-    private Long userId; // 활동한 사용자 Id
+    private Long userId; // 활동한 유저 아이디 누가?
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ActivityType activityType; // 활동 유형
 
     @Column(nullable = false)
-    private Long targetId; // 작업, 댓글, 유저 아이디
+    private Long targetId; // 작업, 댓글, 유저 아이디 무엇을?
 
     @Column(nullable = false)
     private String method;
