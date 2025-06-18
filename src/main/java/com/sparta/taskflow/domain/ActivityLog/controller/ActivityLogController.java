@@ -31,7 +31,10 @@ public class ActivityLogController {
      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate endAt,
      @RequestParam(defaultValue = "timestamp") String sortBy
     ) {
+        // 필터 조건을 서비스 계층으로 전달 후 리스트로 반환받고
         List<ActivityLogResponseDto> logs = activityLogService.getLogsByFillter(userId, activityType, targetId, startAT, endAt, sortBy);
+
+        // 공통 응답 형식으로 래핑하서 프론트에 반환
         return ApiResponse.success("활동로그 조회 성공", logs);
     }
 }

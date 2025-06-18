@@ -28,40 +28,42 @@ public class ActivityLogService {
             String sort
     ) {
 
-        // 해당 유저의 모든 로그 조회
+        // 1. 해당 유저의 모든 로그 조회
         List<ActivityLog> activityLogs = activityLogRepository.findAllByUserId(userId);
 
-        // activityType 필터
+        // 2. activityType 필터
         if (activityType != null) {
             activityLogs = activityLogs.stream()
                     .filter(activityLog -> activityLog.getActivityType() == activityType)
                     .collect(Collectors.toList());
         }
 
-        // targerId 필터
+        // 3. targerId 필터
         if (targetId != null) {
             activityLogs = activityLogs.stream()
                     .filter(activityLog -> activityLog.getTargetId().equals(targetId))
                     .collect(Collectors.toList());
         }
 
-        // 기간 필터
+        // 4. 기간 필터
         if (startAt != null && endAt != null) {
-            LocalDateTime start = startAt.atStartOfDay();
-            LocalDateTime end = endAt.atTime(LocalTime.MAX);
+            LocalDateTime start = startAt.atStartOfDay(); // 00:00:00 시 부터
+            LocalDateTime end = endAt.atTime(LocalTime.MAX); // 23:59:59 시 까지
             activityLogs = activityLogs.stream()
                     .filter(activityLog -> !activityLog.getTimestamp().isBefore(start)
                             && !activityLog.getTimestamp().isAfter(end))
                     .collect(Collectors.toList());
         }
 
-        // 정렬
+        // 5. 정렬
         if ("activity".equals(sort)) {
-            activityLogs.sort((logA, logB) -> logA.getActivityType().name().compareTo(logB.getActivityType().name()));
-        } else { // 시간순
+            // 알파벳 순으로 정렬
+            activityLogs.sort((logA, logB)
+                    -> logA.getActivityType().name().compareTo(logB.getActivityType().name()));
+        } else { // 시간순 정렬, 기본 정렬
             activityLogs.sort((logA, logB) -> logB.getTimestamp().compareTo(logA.getTimestamp()));
         }
-
+        // 6. 해당 값들을 응답 DTO로 변환하여 반환
         return activityLogs.stream().
                 map(ActivityLogResponseDto::new)
                 .collect(Collectors.toList());
