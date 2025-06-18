@@ -47,4 +47,15 @@ public class Task extends BaseTimeEntity {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
+    public void update(String title, String description, LocalDateTime dueDate, String priority, String status, User assignee) {
+
+        this.title = title;
+        this.description = description;
+        this.dueDate = dueDate;
+        this.priority = priority;
+        this.status = status;
+        this.assignee = assignee;
+
+    }
+
 }
