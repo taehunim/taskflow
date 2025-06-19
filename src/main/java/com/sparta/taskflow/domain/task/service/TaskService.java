@@ -34,8 +34,14 @@ public class TaskService {
     @Transactional
     public CreateTaskResponseDto createTask(CreateTaskRequestDto requestDto) {
 
-        User assignee = userRepository.findByIdAndIsDeletedFalse(requestDto.getAssigneeId())
-                                      .orElseThrow(() -> new CustomException(ErrorCode.ASSIGNEE_NOT_FOUND));
+
+        User assignee = null;
+
+        if (requestDto.getAssigneeId() != null) {
+            assignee = userRepository.findById(requestDto.getAssigneeId())
+                                     .filter(user -> !user.isDeleted())
+                                     .orElseThrow(() -> new CustomException(ErrorCode.ASSIGNEE_NOT_FOUND));
+        }
 
         Task task = Task.builder()
                         .title(requestDto.getTitle())

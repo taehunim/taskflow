@@ -4,13 +4,21 @@ import com.sparta.taskflow.domain.task.type.PriorityType;
 import com.sparta.taskflow.domain.task.type.StatusType;
 import com.sparta.taskflow.domain.user.entity.User;
 import com.sparta.taskflow.global.entity.BaseTimeEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -36,7 +44,7 @@ public class Task extends BaseTimeEntity {
     private StatusType status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "assignee_id", nullable = false)
+    @JoinColumn(name = "assignee_id")
     private User assignee;
 
     @Column(name = "start_date")
@@ -51,7 +59,8 @@ public class Task extends BaseTimeEntity {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    public void update(String title, String description, LocalDateTime dueDate, PriorityType priority, StatusType status, User assignee) {
+    public void update(String title, String description, LocalDateTime dueDate, PriorityType priority,
+        StatusType status, User assignee) {
 
         this.title = title;
         this.description = description;

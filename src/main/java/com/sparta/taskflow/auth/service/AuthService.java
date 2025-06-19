@@ -1,6 +1,8 @@
 package com.sparta.taskflow.auth.service;
 
 import com.sparta.taskflow.auth.dto.request.RegisterRequestDto;
+import com.sparta.taskflow.auth.dto.response.TokenResponse;
+import com.sparta.taskflow.auth.jwt.JwtUtil;
 import com.sparta.taskflow.domain.user.dto.response.UserResponseDto;
 import com.sparta.taskflow.domain.user.entity.User;
 import com.sparta.taskflow.domain.user.repository.UserRepository;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
 
     public UserResponseDto register(RegisterRequestDto requestDto) {
@@ -30,6 +33,19 @@ public class AuthService {
         User savedUser = userRepository.save(user);
 
         return UserResponseDto.of(savedUser);
+    }
+
+    public TokenResponse login(String username, String password) {
+        // 사용자를 찾을 수 없는 경우에도 자세한 이유는 숨김
+        User foundUser = userRepository.findByUsernameAndIsDeletedFalse(username).orElseThrow(
+            () -> new CustomException(ErrorCode.INVALID_CREDENTIALS));
+
+        if (!passwordEncoder.matches(password, foundUser.getPassword())) {
+            throw new CustomException(ErrorCode.INVALID_CREDENTIALS);
+        }
+
+        String token = jwtUtil.createToken(foundUser.getId(), foundUser.getRole());
+        return new TokenResponse(token);
     }
 
     private void checkDuplicatesOrThrow(String username, String email) {
