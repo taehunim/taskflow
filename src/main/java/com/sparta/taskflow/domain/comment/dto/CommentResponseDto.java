@@ -1,6 +1,7 @@
 package com.sparta.taskflow.domain.comment.dto;
 
 import com.sparta.taskflow.domain.comment.entity.Comment;
+import com.sparta.taskflow.domain.user.dto.UserSummaryDto;
 import com.sparta.taskflow.domain.user.dto.response.UserResponseDto;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,11 +16,11 @@ public class CommentResponseDto {
     private String content;
     private Long taskId;
     private Long userId;
-    private UserResponseDto user;  // 사용자 정보 포함
+    private UserSummaryDto user;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public static CommentResponseDto of(Comment comment, UserResponseDto userDto) {
+    public static CommentResponseDto of(Comment comment, UserSummaryDto userDto) {
         return CommentResponseDto.builder()
                                  .id(comment.getId())
                                  .content(comment.getContent())

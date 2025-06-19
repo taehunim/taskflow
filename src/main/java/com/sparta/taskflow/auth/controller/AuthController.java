@@ -1,13 +1,8 @@
 package com.sparta.taskflow.auth.controller;
 
-import com.sparta.taskflow.auth.dto.request.LoginRequestDto;
-import com.sparta.taskflow.auth.dto.request.RegisterRequestDto;
-
-import com.sparta.taskflow.auth.dto.response.TokenResponse;
 import com.sparta.taskflow.auth.service.AuthService;
-
+import com.sparta.taskflow.auth.dto.request.RegisterRequestDto;
 import com.sparta.taskflow.domain.user.dto.request.DeleteUserRequestDto;
-
 import com.sparta.taskflow.domain.user.dto.response.UserResponseDto;
 import com.sparta.taskflow.domain.user.service.UserService;
 import com.sparta.taskflow.response.ApiResponse;
@@ -38,16 +33,6 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-
-    @PostMapping("/login")
-    public ResponseEntity<ApiResponse<TokenResponse>> login(
-        @Valid @RequestBody LoginRequestDto requestDto) {
-        TokenResponse responseDto = authService.login(requestDto.getUsername(),
-            requestDto.getPassword());
-
-        ApiResponse<TokenResponse> response = ApiResponse.success("로그인이 완료되었습니다.", responseDto);
-
-
     // TODO : SpringSecurity 적용 이후 로그인 유저 정보 받는 방법으로 변경 필요.
     @PostMapping("/withdraw")
     public ResponseEntity<ApiResponse<Void>> withdraw(
@@ -56,7 +41,6 @@ public class AuthController {
     ) {
         userService.deleteUser(loginUserId, deleteUserDto);
         ApiResponse<Void> response = ApiResponse.success("회원탈퇴가 완료되었습니다.", null);
-
         return ResponseEntity.ok(response);
     }
 }

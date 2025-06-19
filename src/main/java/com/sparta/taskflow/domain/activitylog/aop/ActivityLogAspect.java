@@ -3,7 +3,7 @@ package com.sparta.taskflow.domain.activitylog.aop;
 import com.sparta.taskflow.domain.activitylog.Enum.ActivityType;
 import com.sparta.taskflow.domain.activitylog.entity.ActivityLog;
 import com.sparta.taskflow.domain.activitylog.repository.ActivityLogRepository;
-import com.sparta.taskflow.domain.comment.dto.CreateCommentResponseDto;
+import com.sparta.taskflow.domain.comment.dto.CommentResponseDto;
 import com.sparta.taskflow.domain.task.dto.response.TaskResponseDto;
 import com.sparta.taskflow.response.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -116,8 +116,8 @@ public class ActivityLogAspect {
             return dto.getId();
         }
 
-        if (data instanceof CreateCommentResponseDto && activityType.name().startsWith("COMMENT_")) {
-            CreateCommentResponseDto dto = (CreateCommentResponseDto) data;
+        if (data instanceof CommentResponseDto && activityType.name().startsWith("COMMENT_")) {
+            CommentResponseDto dto = (CommentResponseDto) data;
             return dto.getId();
         }
 

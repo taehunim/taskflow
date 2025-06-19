@@ -4,7 +4,7 @@ import com.sparta.taskflow.domain.comment.dto.CommentRequestDto;
 import com.sparta.taskflow.domain.comment.dto.CommentResponseDto;
 import com.sparta.taskflow.domain.comment.entity.Comment;
 import com.sparta.taskflow.domain.comment.repository.CommentRepository;
-import com.sparta.taskflow.domain.user.dto.response.UserResponseDto;
+import com.sparta.taskflow.domain.user.dto.UserSummaryDto;
 import com.sparta.taskflow.domain.user.entity.User;
 import com.sparta.taskflow.domain.user.repository.UserRepository;
 import com.sparta.taskflow.global.exception.CustomException;
@@ -30,9 +30,12 @@ public class CommentService {
                                  .build();
 
         Comment saved = commentRepository.save(comment);
+
         User user = userRepository.findById(saved.getUserId())
                                   .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        return CommentResponseDto.of(saved, UserResponseDto.of(user));
+        UserSummaryDto userSummary = UserSummaryDto.of(user);
+
+        return CommentResponseDto.of(saved, userSummary);
     }
 
     // 댓글 조회
@@ -43,7 +46,8 @@ public class CommentService {
         return comments.map(comment -> {
             User user = userRepository.findById(comment.getUserId())
                                       .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-            return CommentResponseDto.of(comment, UserResponseDto.of(user));
+            UserSummaryDto userSummary = UserSummaryDto.of(user);
+            return CommentResponseDto.of(comment, userSummary);
         });
     }
 }
