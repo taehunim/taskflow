@@ -27,6 +27,10 @@ spring:
         # 컨트롤러나 뷰에서 DB에 영향을 주는 것은 차단하기 위해 영속성 컨테스트를 서비스 계층에서 닫음
         open-in-view: false
 
+jwt:
+  secret:
+    key: ${SECRET_KEY}
+
 servlet:
   multipart:
     # 파일 업로드 최대 크기
