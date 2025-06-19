@@ -16,7 +16,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
- * 토큰이 존재하는 경우에 올바른 토큰인지만 검증하는 필터이다.
+ * 토큰이 존재하는 경우에 userId를 Spring Security User 타입에 담아 SecurityContext에 넣어준다.
+ * 토큰이 존재하지 않거나 유효하지 않은 토큰인 경우 오류 메시지를 request attribute에 담아
+ * JwtAuthenticationEntryPoint에서 사용할 수 있도록 한다.
  */
 @Component
 @RequiredArgsConstructor
@@ -32,7 +34,7 @@ public class JwtFilter extends OncePerRequestFilter {
          토큰이 없거나 잘못된 토큰일 때 다음 FilterChain으로 넘기면
          Spring Security의 AnonymousAuthenticationFilter가
          미인증 상태를 나타내는 Authentication인 AnonymousAuthenticationToken을 SecurityContext에 넣어준다.
-         그리고 이는 이후 인가 필터에서 자동으로 걸러지므로 토큰이 없는 경우 추가 작업이 필요하지 않다.
+         이후 AuthorizationFilter에서 해당 Authentication은 미인증과 동일하게 처리된다.
          */
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
