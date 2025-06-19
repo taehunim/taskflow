@@ -1,8 +1,10 @@
 package com.sparta.taskflow.global.exception;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.sparta.taskflow.response.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -53,6 +55,35 @@ public class GlobalExceptionHandler {
         return ResponseEntity
             .status(errorCode.getStatus())
             .body(ApiResponse.fail(errorResponseDto.getMessage(), errorResponseDto));
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiResponse<ErrorResponseDto>> handleHttpMessageNotReadable(HttpMessageNotReadableException e) {
+
+        ErrorCode errorCode = ErrorCode.INVALID_REQUEST;
+        String message = "데이터 형식이 올바르지 않습니다.";
+
+        if (e.getCause() instanceof InvalidFormatException cause) {
+            Class<?> targetType = cause.getTargetType();
+
+            if (targetType.isEnum()) {
+                message = "유효하지 않은 Enum값입니다.";
+            } else {
+                message = "데이터 형식이 올바르지 않습니다.";
+            }
+        }
+
+        log.warn("[JSON 파싱 예외 발생] {} - {}", errorCode.name(), e.getMessage());
+
+        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
+            errorCode.getStatus().value(),
+            errorCode.name(),
+            message
+        );
+
+        return ResponseEntity
+            .status(errorCode.getStatus())
+            .body(ApiResponse.fail(errorResponseDto.getMessage(), null));
     }
 
     // 예상하지 못한 예외 처리

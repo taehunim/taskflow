@@ -100,9 +100,25 @@ public class TaskService {
 
     }
 
+    @Transactional
+    public TaskResponseDto updateStatus(Long taskId, StatusType newStatus) {
+
+        Task task = taskRepository.findByIdAndIsDeletedFalse(taskId)
+                                  .orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
+
+        if (!task.getStatus().canChangeToStatus(newStatus)) {
+            throw new CustomException(ErrorCode.INVALID_STATUS_TRANSITION);
+        }
+
+        task.updateStatus(newStatus);
+
+        return TaskResponseDto.of(task);
+
+    }
+
     public void deleteTask(Long taskId) {
 
-        Task task = taskRepository.findById(taskId)
+        Task task = taskRepository.findByIdAndIsDeletedFalse(taskId)
                                   .orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
 
         task.softDelete();
