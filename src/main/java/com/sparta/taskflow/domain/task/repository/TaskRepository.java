@@ -2,6 +2,7 @@ package com.sparta.taskflow.domain.task.repository;
 
 import com.sparta.taskflow.domain.task.entity.Task;
 import com.sparta.taskflow.domain.task.type.StatusType;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,5 +32,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     );
 
     Optional<Task> findByIdAndIsDeletedFalse(Long id);
+
+    List<Task> findAllByIsDeletedFalse();
 
 }

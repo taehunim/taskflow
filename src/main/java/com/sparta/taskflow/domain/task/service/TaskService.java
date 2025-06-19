@@ -5,6 +5,7 @@ import com.sparta.taskflow.domain.task.dto.request.UpdateTaskRequestDto;
 import com.sparta.taskflow.domain.task.dto.response.CreateTaskResponseDto;
 import com.sparta.taskflow.domain.task.dto.response.TaskListResponseDto;
 import com.sparta.taskflow.domain.task.dto.response.TaskResponseDto;
+import com.sparta.taskflow.domain.task.dto.response.TaskStatisticsResponseDto;
 import com.sparta.taskflow.domain.task.entity.Task;
 import com.sparta.taskflow.domain.task.repository.TaskRepository;
 import com.sparta.taskflow.domain.task.type.StatusType;
@@ -13,7 +14,9 @@ import com.sparta.taskflow.domain.user.repository.UserRepository;
 import com.sparta.taskflow.global.exception.CustomException;
 import com.sparta.taskflow.global.exception.ErrorCode;
 import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -31,9 +34,8 @@ public class TaskService {
     @Transactional
     public CreateTaskResponseDto createTask(CreateTaskRequestDto requestDto) {
 
-        User assignee = userRepository.findById(requestDto.getAssigneeId())
-                                      .filter(user -> !user.isDeleted())
-                                      .orElseThrow(() ->  new CustomException(ErrorCode.ASSIGNEE_NOT_FOUND));
+        User assignee = userRepository.findByIdAndIsDeletedFalse(requestDto.getAssigneeId())
+                                      .orElseThrow(() -> new CustomException(ErrorCode.ASSIGNEE_NOT_FOUND));
 
         Task task = Task.builder()
                         .title(requestDto.getTitle())
@@ -120,6 +122,32 @@ public class TaskService {
         task.softDelete();
 
         taskRepository.save(task);
+
+    }
+
+    @Transactional
+    public TaskStatisticsResponseDto getTaskStatistics() {
+
+        List<Task> tasks = taskRepository.findAllByIsDeletedFalse();
+
+        long totalCount = tasks.size();
+
+        Map<StatusType, Long> statusCounts = tasks.stream()
+                                                  .filter(task -> task.getStatus() != null)
+                                                  .collect(Collectors.groupingBy(Task::getStatus, Collectors.counting()));
+
+        long doneCount = statusCounts.getOrDefault(StatusType.DONE, 0L);
+
+        double completionRate = totalCount == 0 ? 0.0 : Math.round((doneCount * 10000.0 / totalCount)) / 100.0;
+
+        LocalDateTime now = LocalDateTime.now();
+        long overdueCount = tasks.stream()
+                                 .filter(task -> task.getDueDate() != null)
+                                 .filter(task -> (task.getStatus() == StatusType.TODO || task.getStatus() == StatusType.IN_PROGRESS))
+                                 .filter(task -> task.getDueDate().isBefore(now))
+                                 .count();
+
+        return TaskStatisticsResponseDto.of(totalCount, statusCounts, completionRate, overdueCount);
 
     }
 

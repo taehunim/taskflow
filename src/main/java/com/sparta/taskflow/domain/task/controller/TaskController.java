@@ -6,6 +6,7 @@ import com.sparta.taskflow.domain.task.dto.request.UpdateTaskStatusRequestDto;
 import com.sparta.taskflow.domain.task.dto.response.CreateTaskResponseDto;
 import com.sparta.taskflow.domain.task.dto.response.TaskListResponseDto;
 import com.sparta.taskflow.domain.task.dto.response.TaskResponseDto;
+import com.sparta.taskflow.domain.task.dto.response.TaskStatisticsResponseDto;
 import com.sparta.taskflow.domain.task.service.TaskService;
 import com.sparta.taskflow.domain.task.type.StatusType;
 import com.sparta.taskflow.response.ApiResponse;
@@ -125,6 +126,19 @@ public class TaskController {
         );
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<ApiResponse<TaskStatisticsResponseDto>> getTaskStatistics() {
+
+        TaskStatisticsResponseDto responseDto = taskService.getTaskStatistics();
+        ApiResponse<TaskStatisticsResponseDto> response = ApiResponse.success(
+            "태스크 통계를 조회했습니다.",
+            responseDto
+        );
+
+        return ResponseEntity.ok(response);
+
     }
 
 }
