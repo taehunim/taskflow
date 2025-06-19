@@ -1,8 +1,7 @@
 package com.sparta.taskflow.domain.comment.service;
 
-import com.sparta.taskflow.domain.comment.dto.request.CreateCommentRequestDto;
-import com.sparta.taskflow.domain.comment.dto.response.CommentResponseDto;
-import com.sparta.taskflow.domain.comment.dto.response.CreateCommentResponseDto;
+import com.sparta.taskflow.domain.comment.dto.CommentRequestDto;
+import com.sparta.taskflow.domain.comment.dto.CommentResponseDto;
 import com.sparta.taskflow.domain.comment.entity.Comment;
 import com.sparta.taskflow.domain.comment.repository.CommentRepository;
 import com.sparta.taskflow.domain.user.dto.response.UserResponseDto;
@@ -22,29 +21,29 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
 
-    // 댓글 생성 메서드
-    public CreateCommentResponseDto createComment(CreateCommentRequestDto requestDto, Long taskId) {
+    // 댓글 생성
+    public CommentResponseDto createComment(CommentRequestDto requestDto, Long taskId) {
         Comment comment = Comment.builder()
                                  .content(requestDto.getContent())
-                                 .taskId(taskId)  // 여기서 pathVariable 주입
                                  .userId(requestDto.getUserId())
+                                 .taskId(taskId)
                                  .build();
 
         Comment saved = commentRepository.save(comment);
-        return CreateCommentResponseDto.of(saved);
+        User user = userRepository.findById(saved.getUserId())
+                                  .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        return CommentResponseDto.of(saved, UserResponseDto.of(user));
     }
 
-    // 댓글 목록 조회 메서드 (페이지네이션, user 정보 포함)
+    // 댓글 조회
     public Page<CommentResponseDto> getCommentsByTask(Long taskId, Pageable pageable) {
         Page<Comment> comments = commentRepository
             .findAllByTaskIdAndIsDeletedFalseOrderByCreatedAtDesc(taskId, pageable);
 
         return comments.map(comment -> {
             User user = userRepository.findById(comment.getUserId())
-                                      .orElseThrow(
-                                          () -> new CustomException(ErrorCode.USER_NOT_FOUND));
-            UserResponseDto userDto = UserResponseDto.of(user);
-            return CommentResponseDto.of(comment, userDto);
+                                      .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+            return CommentResponseDto.of(comment, UserResponseDto.of(user));
         });
     }
 }
