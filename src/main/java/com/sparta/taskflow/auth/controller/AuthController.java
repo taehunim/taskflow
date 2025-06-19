@@ -9,6 +9,8 @@ import com.sparta.taskflow.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,12 +35,22 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    // TODO : SpringSecurity 적용 이후 로그인 유저 정보 받는 방법으로 변경 필요.
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<TokenResponse>> login(
+        @Valid @RequestBody LoginRequestDto requestDto) {
+        TokenResponse responseDto = authService.login(requestDto.getUsername(),
+            requestDto.getPassword());
+
+        ApiResponse<TokenResponse> response = ApiResponse.success("로그인이 완료되었습니다.", responseDto);
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping("/withdraw")
     public ResponseEntity<ApiResponse<Void>> withdraw(
-        @RequestParam Long loginUserId,
+        @AuthenticationPrincipal User user,
         @RequestBody @Valid DeleteUserRequestDto deleteUserDto
     ) {
+        Long loginUserId = Long.valueOf(user.getUsername());
         userService.deleteUser(loginUserId, deleteUserDto);
         ApiResponse<Void> response = ApiResponse.success("회원탈퇴가 완료되었습니다.", null);
         return ResponseEntity.ok(response);

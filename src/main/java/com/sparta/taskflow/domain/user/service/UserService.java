@@ -21,7 +21,7 @@ public class UserService {
     private final PasswordValidator passwordValidator;
 
     public UserResponseDto getUser(Long loginUserId) {
-        User foundUser = userRepository.findByIdOrElseThrow(loginUserId);
+        User foundUser = userRepository.findByIdAndIsDeletedFalseOrElseThrow(loginUserId);
         return UserResponseDto.of(foundUser);
     }
 
