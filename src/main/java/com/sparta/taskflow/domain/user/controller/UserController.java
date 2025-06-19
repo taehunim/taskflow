@@ -29,14 +29,4 @@ public class UserController {
         return ResponseEntity.ok(ApiResponse.success("사용자 정보를 조회했습니다.", response));
     }
 
-    // TODO : SpringSecurity 적용 이후 로그인 유저 정보 받는 방법으로 변경 필요.
-    @PostMapping("/withdraw")
-    public ResponseEntity<ApiResponse<Void>> withdraw(
-        @RequestParam Long loginUserId,
-        @RequestBody @Valid DeleteUserRequestDto deleteUserDto
-    ) {
-        userService.deleteUser(loginUserId, deleteUserDto);
-        ApiResponse<Void> response = ApiResponse.success("회원탈퇴가 완료되었습니다.", null);
-        return ResponseEntity.ok(response);
-    }
 }
