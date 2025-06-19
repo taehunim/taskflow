@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ActivityLogService {
 
-    public final ActivityLogRepository activityLogRepository;
+    private final ActivityLogRepository activityLogRepository;
 
     public List<ActivityLogResponseDto> getLogsByFilter(
             Long userId,
@@ -50,8 +50,8 @@ public class ActivityLogService {
             LocalDateTime start = startAt.atStartOfDay(); // 00:00:00 시 부터
             LocalDateTime end = endAt.atTime(LocalTime.MAX); // 23:59:59 시 까지
             activityLogs = activityLogs.stream()
-                    .filter(activityLog -> !activityLog.getTimestamp().isBefore(start)
-                            && !activityLog.getTimestamp().isAfter(end))
+                    .filter(activityLog -> !activityLog.getCreatedAt().isBefore(start)
+                            && !activityLog.getCreatedAt().isAfter(end))
                     .collect(Collectors.toList());
         }
 
@@ -61,7 +61,7 @@ public class ActivityLogService {
             activityLogs.sort((logA, logB)
                     -> logA.getActivityType().name().compareTo(logB.getActivityType().name()));
         } else { // 시간순 정렬, 기본 정렬
-            activityLogs.sort((logA, logB) -> logB.getTimestamp().compareTo(logA.getTimestamp()));
+            activityLogs.sort((logA, logB) -> logB.getCreatedAt().compareTo(logA.getCreatedAt()));
         }
         // 6. 해당 값들을 응답 DTO로 변환하여 반환
         return activityLogs.stream().

@@ -15,7 +15,7 @@ public interface ActivityLogRepository extends JpaRepository<ActivityLog, Long> 
 
     List<ActivityLog> findAllByUserIdAndTargetId(Long userId, Long targetId);
 
-    List<ActivityLog> findAllByUserIdAndTimestampBetween(
+    List<ActivityLog> findAllByUserIdAndCreatedAtBetween(
             Long userId,
             LocalDateTime startAt,
             LocalDateTime endAt);

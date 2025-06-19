@@ -31,7 +31,10 @@ public class ActivityLogAspect {
     private final ActivityLogRepository activityLogRepository;
     private final HttpServletRequest request;
 
-    @AfterReturning(pointcut = "@annotation(com.sparta.taskflow.domain.activitylog.aop.ActivityLoggable)", returning = "result")
+    @AfterReturning(
+            pointcut = "@annotation(com.sparta.taskflow.domain.activitylog.aop.ActivityLoggable)",
+            returning = "result"
+    )
     public void logActivity(JoinPoint joinPoint, Object result) {
 
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
