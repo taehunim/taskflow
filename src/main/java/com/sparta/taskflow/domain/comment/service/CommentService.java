@@ -45,9 +45,25 @@ public class CommentService {
 
         return comments.map(comment -> {
             User user = userRepository.findById(comment.getUserId())
-                                      .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+                                      .orElseThrow(
+                                          () -> new CustomException(ErrorCode.USER_NOT_FOUND));
             UserSummaryDto userSummary = UserSummaryDto.of(user);
             return CommentResponseDto.of(comment, userSummary);
+        });
+    }
+
+    // 댓글 검색
+    public Page<CommentResponseDto> searchComments(String keyword, Pageable pageable) {
+        Page<Comment> comments = commentRepository
+            .findByContentContainingIgnoreCaseAndIsDeletedFalseOrderByCreatedAtDesc(keyword,
+                pageable);
+
+        return comments.map(comment -> {
+            User user = userRepository.findById(comment.getUserId())
+                                      .orElseThrow(
+                                          () -> new CustomException(ErrorCode.USER_NOT_FOUND));
+            UserSummaryDto userDto = UserSummaryDto.of(user);
+            return CommentResponseDto.of(comment, userDto);
         });
     }
 }

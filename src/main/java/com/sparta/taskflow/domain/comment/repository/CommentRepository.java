@@ -11,4 +11,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     Page<Comment> findAllByTaskIdAndIsDeletedFalseOrderByCreatedAtDesc(Long taskId,
         Pageable pageable);
+
+
+    Page<Comment> findByContentContainingIgnoreCaseAndIsDeletedFalseOrderByCreatedAtDesc(
+        String keyword, Pageable pageable);
 }
