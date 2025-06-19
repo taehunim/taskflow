@@ -16,21 +16,18 @@ import org.springframework.data.domain.Page;
 public class TaskListResponseDto {
 
     private List<TaskResponseDto> content;
-    private int page;
-    private int size;
     private long totalElements;
     private int totalPages;
-    private String sort;
+    private int size;
+    private int number;
 
-    public static TaskListResponseDto of(Page<TaskResponseDto> pageData, String sort) {
+    public static TaskListResponseDto of(Page<TaskResponseDto> pageData) {
         return TaskListResponseDto.builder()
                                   .content(pageData.getContent())
-                                  .page(pageData.getNumber())
-                                  .size(pageData.getSize())
                                   .totalElements(pageData.getTotalElements())
                                   .totalPages(pageData.getTotalPages())
-                                  .sort(sort)
+                                  .size(pageData.getSize())
+                                  .number(pageData.getNumber())
                                   .build();
     }
-
 }

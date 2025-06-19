@@ -1,6 +1,10 @@
 package com.sparta.taskflow.domain.task.dto.response;
 
 import com.sparta.taskflow.domain.task.entity.Task;
+import com.sparta.taskflow.domain.task.type.PriorityType;
+import com.sparta.taskflow.domain.task.type.StatusType;
+import com.sparta.taskflow.domain.user.dto.UserSummaryDto;
+import com.sparta.taskflow.domain.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,27 +15,34 @@ import java.time.LocalDateTime;
 public class CreateTaskResponseDto {
 
     private Long id;
-    private LocalDateTime createdAt;
     private String title;
     private String description;
-    private String priority;
+    private PriorityType priority;
+    private StatusType status;
     private Long assigneeId;
-    private String assigneeName;
-    private LocalDateTime dueAt;
-    private String status;
+    private UserSummaryDto assignee;
+    private LocalDateTime dueDate;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
-    public static CreateTaskResponseDto of(Task task, String assigneeName) {
+    public static CreateTaskResponseDto of(Task task) {
+        User assignee = task.getAssignee();
         return CreateTaskResponseDto.builder()
-                .id(task.getId())
-                .createdAt(task.getCreatedAt())
-                .title(task.getTitle())
-                .description(task.getDescription())
-                .priority(task.getPriority())
-                .status(task.getStatus())
-                .assigneeId(task.getAssigneeId())
-                .assigneeName(assigneeName)
-                .dueAt(task.getDueAt())
-                .build();
+                                    .id(task.getId())
+                                    .title(task.getTitle())
+                                    .description(task.getDescription())
+                                    .priority(task.getPriority())
+                                    .status(task.getStatus())
+                                    .assigneeId(assignee.getId())
+                                    .assignee(UserSummaryDto.builder()
+                                                            .id(assignee.getId())
+                                                            .username(assignee.getUsername())
+                                                            .name(assignee.getName())
+                                                            .email(assignee.getEmail())
+                                                            .build())
+                                    .dueDate(task.getDueDate())
+                                    .createdAt(task.getCreatedAt())
+                                    .updatedAt(task.getUpdatedAt())
+                                    .build();
     }
-
 }

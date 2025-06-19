@@ -22,7 +22,11 @@ public enum ErrorCode {
     DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다."),
 
     // 인증 관련 에러
-    INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "잘못된 사용자명 또는 비밀번호입니다.");
+    INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "잘못된 사용자명 또는 비밀번호입니다."),
+
+    // Task 관련 에러 정의
+    ASSIGNEE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않거나 탈퇴된 담당자입니다."),
+    TASK_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 테스크가 존재하지 않습니다.");
 
     // 필드
     // HTTP 상태코드
