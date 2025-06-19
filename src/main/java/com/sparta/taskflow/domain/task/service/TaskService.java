@@ -151,4 +151,17 @@ public class TaskService {
 
     }
 
+    @Transactional
+    public TaskListResponseDto getTodayTasks(Pageable pageable) {
+
+        Page<Task> taskPage = taskRepository.findTodayTasks(pageable);
+
+        List<TaskResponseDto> taskResponseDtos = taskPage.stream()
+                                                         .map(TaskResponseDto::of)
+                                                         .collect(Collectors.toList());
+
+        return TaskListResponseDto.of(new PageImpl<>(taskResponseDtos, pageable, taskPage.getTotalElements()));
+
+    }
+
 }

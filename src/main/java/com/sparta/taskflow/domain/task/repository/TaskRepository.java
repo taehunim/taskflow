@@ -31,6 +31,14 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
         Pageable pageable
     );
 
+    @Query("""
+    SELECT t
+    FROM Task t
+    WHERE t.isDeleted = false
+    AND (t.status = 'TODO' OR t.status = 'IN_PROGRESS')
+    """)
+    Page<Task> findTodayTasks(Pageable pageable);
+
     Optional<Task> findByIdAndIsDeletedFalse(Long id);
 
     List<Task> findAllByIsDeletedFalse();
