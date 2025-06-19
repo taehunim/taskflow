@@ -12,14 +12,17 @@ import com.sparta.taskflow.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AuthService {
 
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
+
 
     public UserResponseDto register(RegisterRequestDto requestDto) {
         checkDuplicatesOrThrow(requestDto.getUsername(), requestDto.getEmail());
@@ -35,6 +38,7 @@ public class AuthService {
         return UserResponseDto.of(savedUser);
     }
 
+    @Transactional(readOnly = true)
     public TokenResponse login(String username, String password) {
         // 사용자를 찾을 수 없는 경우에도 자세한 이유는 숨김
         User foundUser = userRepository.findByUsernameAndIsDeletedFalse(username).orElseThrow(
