@@ -1,20 +1,28 @@
 package com.sparta.taskflow.domain.comment.service;
 
-import com.sparta.taskflow.domain.comment.dto.CreateCommentRequestDto;
-import com.sparta.taskflow.domain.comment.dto.CreateCommentResponseDto;
+import com.sparta.taskflow.domain.comment.dto.request.CreateCommentRequestDto;
+import com.sparta.taskflow.domain.comment.dto.response.CommentResponseDto;
+import com.sparta.taskflow.domain.comment.dto.response.CreateCommentResponseDto;
 import com.sparta.taskflow.domain.comment.entity.Comment;
 import com.sparta.taskflow.domain.comment.repository.CommentRepository;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.sparta.taskflow.domain.user.dto.response.UserResponseDto;
+import com.sparta.taskflow.domain.user.entity.User;
+import com.sparta.taskflow.domain.user.repository.UserRepository;
+import com.sparta.taskflow.global.exception.CustomException;
+import com.sparta.taskflow.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-@Service
 @RequiredArgsConstructor
+@Service
 public class CommentService {
 
     private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
 
+    // 댓글 생성 메서드
     public CreateCommentResponseDto createComment(CreateCommentRequestDto requestDto) {
         Comment comment = Comment.builder()
                                  .content(requestDto.getContent())
@@ -26,11 +34,16 @@ public class CommentService {
         return CreateCommentResponseDto.of(saved);
     }
 
-    public List<CreateCommentResponseDto> getCommentsByTask(Long taskId) {
-        List<Comment> comments = commentRepository.findAllByTaskIdAndIsDeletedFalseOrderByCreatedAtDesc(
-            taskId);
-        return comments.stream()
-                       .map(CreateCommentResponseDto::of)
-                       .collect(Collectors.toList());
+    // 댓글 목록 조회 메서드 (페이지네이션, user 정보 포함)
+    public Page<CommentResponseDto> getCommentsByTask(Long taskId, Pageable pageable) {
+        Page<Comment> comments = commentRepository
+            .findAllByTaskIdAndIsDeletedFalseOrderByCreatedAtDesc(taskId, pageable);
+
+        return comments.map(comment -> {
+            User user = userRepository.findById(comment.getUserId())
+                                      .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+            UserResponseDto userDto = UserResponseDto.of(user);
+            return CommentResponseDto.of(comment, userDto);
+        });
     }
 }
