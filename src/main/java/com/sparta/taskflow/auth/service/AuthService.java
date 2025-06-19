@@ -9,7 +9,6 @@ import com.sparta.taskflow.domain.user.repository.UserRepository;
 import com.sparta.taskflow.domain.user.type.RoleType;
 import com.sparta.taskflow.global.exception.CustomException;
 import com.sparta.taskflow.global.exception.ErrorCode;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,7 +37,7 @@ public class AuthService {
 
     public TokenResponse login(String username, String password) {
         // 사용자를 찾을 수 없는 경우에도 자세한 이유는 숨김
-        User foundUser = userRepository.findByUsername(username).orElseThrow(
+        User foundUser = userRepository.findByUsernameAndIsDeletedFalse(username).orElseThrow(
             () -> new CustomException(ErrorCode.INVALID_CREDENTIALS));
 
         if (!passwordEncoder.matches(password, foundUser.getPassword())) {
