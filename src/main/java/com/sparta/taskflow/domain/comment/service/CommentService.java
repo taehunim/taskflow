@@ -70,11 +70,17 @@ public class CommentService {
     // 댓글 삭제
     public void deleteComment(Long commentId, Long taskId) {
         Comment comment = commentRepository.findByIdAndTaskIdAndIsDeletedFalse(commentId, taskId)
-            .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+                                           .orElseThrow(() -> new CustomException(
+                                               ErrorCode.COMMENT_NOT_FOUND));
+
+        if (!comment.getIsDeleted()) {
+            throw new CustomException(ErrorCode.COMMENT_ALREADY_DELETED);
+        }
 
         if (!comment.getTaskId().equals(taskId)) {
             throw new CustomException(ErrorCode.COMMENT_TASK_MISMATCH);
         }
+
         comment.softDelete();
         commentRepository.save(comment);
     }

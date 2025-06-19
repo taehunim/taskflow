@@ -32,6 +32,7 @@ public enum ErrorCode {
 
     // Comment 관련 에러
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 댓글을 찾을 수 없습니다."),
+    COMMENT_ALREADY_DELETED(HttpStatus.BAD_REQUEST, "이미 삭제된 댓글입니다."),
     COMMENT_TASK_MISMATCH(HttpStatus.BAD_REQUEST, "해당 댓글은 지정된 태스크에 속하지 않습니다.");
 
     // 필드
