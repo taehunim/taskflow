@@ -5,9 +5,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class CreateCommentRequestDto {
+public class CommentRequestDto {
 
     private String content;
-    private Long taskId;
     private Long userId;
+
+    public CommentRequestDto(String content, Long userId) {
+        this.content = content;
+        this.userId = userId;
+    }
 }
