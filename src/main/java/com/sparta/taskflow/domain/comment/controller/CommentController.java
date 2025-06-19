@@ -47,6 +47,7 @@ public class CommentController {
         return ResponseEntity.ok(response);
     }
 
+    // 댓글 검색
     @GetMapping("/comments/search")
     public ResponseEntity<ApiResponse<Page<CommentResponseDto>>> searchComments(
         @RequestParam String keyword,
@@ -54,5 +55,15 @@ public class CommentController {
     ) {
         Page<CommentResponseDto> result = commentService.searchComments(keyword, pageable);
         return ResponseEntity.ok(ApiResponse.success("댓글 검색 결과입니다.", result));
+    }
+
+    // 댓글 삭제
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<ApiResponse<Void>> deleteComment(
+        @PathVariable Long taskId,
+        @PathVariable Long commentId
+    ) {
+        commentService.deleteComment(taskId, commentId);
+        return ResponseEntity.ok(ApiResponse.success("댓글이 삭제되었습니다.", null));
     }
 }
