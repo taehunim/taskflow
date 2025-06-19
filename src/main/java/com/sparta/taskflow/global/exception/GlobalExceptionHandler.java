@@ -68,8 +68,6 @@ public class GlobalExceptionHandler {
 
             if (targetType.isEnum()) {
                 message = "유효하지 않은 Enum값입니다.";
-            } else {
-                message = "데이터 형식이 올바르지 않습니다.";
             }
         }
 
