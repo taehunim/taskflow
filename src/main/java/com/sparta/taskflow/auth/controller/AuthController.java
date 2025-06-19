@@ -1,19 +1,16 @@
 package com.sparta.taskflow.auth.controller;
 
-import com.sparta.taskflow.auth.dto.request.LoginRequestDto;
-import com.sparta.taskflow.auth.dto.request.RegisterRequestDto;
-
-import com.sparta.taskflow.auth.dto.response.TokenResponse;
 import com.sparta.taskflow.auth.service.AuthService;
-
+import com.sparta.taskflow.auth.dto.request.RegisterRequestDto;
 import com.sparta.taskflow.domain.user.dto.request.DeleteUserRequestDto;
-
 import com.sparta.taskflow.domain.user.dto.response.UserResponseDto;
 import com.sparta.taskflow.domain.user.service.UserService;
 import com.sparta.taskflow.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,7 +35,6 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<TokenResponse>> login(
         @Valid @RequestBody LoginRequestDto requestDto) {
@@ -49,13 +45,14 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-
-    // TODO : SpringSecurity 적용 이후 로그인 유저 정보 받는 방법으로 변경 필요.
     @PostMapping("/withdraw")
-    public ResponseEntity<ApiResponse<Void>> withdraw ( @RequestParam Long loginUserId, @RequestBody @Valid DeleteUserRequestDto deleteUserDto) {
+    public ResponseEntity<ApiResponse<Void>> withdraw(
+        @AuthenticationPrincipal User user,
+        @RequestBody @Valid DeleteUserRequestDto deleteUserDto
+    ) {
+        Long loginUserId = Long.valueOf(user.getUsername());
         userService.deleteUser(loginUserId, deleteUserDto);
         ApiResponse<Void> response = ApiResponse.success("회원탈퇴가 완료되었습니다.", null);
-
         return ResponseEntity.ok(response);
     }
 }

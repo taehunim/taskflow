@@ -16,7 +16,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
   
     Optional<User> findByIdAndIsDeletedFalse(Long id);
 
-    default User findByIdOrElseThrow(Long loginUserId) {
-        return findById(loginUserId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    default User findByIdAndIsDeletedFalseOrElseThrow(Long loginUserId) {
+        return findByIdAndIsDeletedFalse(loginUserId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 }
