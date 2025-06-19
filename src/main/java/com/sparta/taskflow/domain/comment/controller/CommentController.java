@@ -21,16 +21,13 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    // 댓글 생성 API (명세서에 맞게 /api/tasks/{taskId}/comments 로 변경)
     @PostMapping("/tasks/{taskId}/comments")
     public ResponseEntity<ApiResponse<CreateCommentResponseDto>> createComment(
         @PathVariable Long taskId,
         @Valid @RequestBody CreateCommentRequestDto requestDto
     ) {
-        // pathVariable로 받은 taskId를 requestDto에 세팅
-        requestDto.setTaskId(taskId);
+        CreateCommentResponseDto responseDto = commentService.createComment(requestDto, taskId);
 
-        CreateCommentResponseDto responseDto = commentService.createComment(requestDto);
         ApiResponse<CreateCommentResponseDto> response = ApiResponse.success(
             "댓글이 생성되었습니다.",
             responseDto
@@ -47,7 +44,8 @@ public class CommentController {
         @RequestParam(defaultValue = "10") int size
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        Page<CommentResponseDto> responseDtoPage = commentService.getCommentsByTask(taskId, pageable);
+        Page<CommentResponseDto> responseDtoPage = commentService.getCommentsByTask(taskId,
+            pageable);
 
         ApiResponse<Page<CommentResponseDto>> response = ApiResponse.success(
             "댓글 목록을 조회했습니다.",

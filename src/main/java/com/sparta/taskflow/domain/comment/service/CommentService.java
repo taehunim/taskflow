@@ -23,10 +23,10 @@ public class CommentService {
     private final UserRepository userRepository;
 
     // 댓글 생성 메서드
-    public CreateCommentResponseDto createComment(CreateCommentRequestDto requestDto) {
+    public CreateCommentResponseDto createComment(CreateCommentRequestDto requestDto, Long taskId) {
         Comment comment = Comment.builder()
                                  .content(requestDto.getContent())
-                                 .taskId(requestDto.getTaskId())
+                                 .taskId(taskId)  // 여기서 pathVariable 주입
                                  .userId(requestDto.getUserId())
                                  .build();
 
@@ -41,7 +41,8 @@ public class CommentService {
 
         return comments.map(comment -> {
             User user = userRepository.findById(comment.getUserId())
-                                      .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+                                      .orElseThrow(
+                                          () -> new CustomException(ErrorCode.USER_NOT_FOUND));
             UserResponseDto userDto = UserResponseDto.of(user);
             return CommentResponseDto.of(comment, userDto);
         });
