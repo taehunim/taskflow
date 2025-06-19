@@ -4,12 +4,14 @@ import com.sparta.taskflow.domain.activitylog.Enum.ActivityType;
 import com.sparta.taskflow.domain.activitylog.entity.ActivityLog;
 
 import java.time.LocalDateTime;
+import lombok.Getter;
 
+@Getter
 public class ActivityLogResponseDto {
 
     private Long id;
     private Long userId;
-    private ActivityType activityType;
+    private String activityType;
     private Long targetId;
     private String method;
     private String url;
@@ -20,7 +22,7 @@ public class ActivityLogResponseDto {
     public ActivityLogResponseDto(ActivityLog log) {
         this.id = log.getId();
         this.userId = log.getUserId();
-        this.activityType = log.getActivityType();
+        this.activityType = log.getActivityType().toString();
         this.targetId = log.getTargetId();
         this.method = log.getMethod();
         this.url = log.getUrl();
