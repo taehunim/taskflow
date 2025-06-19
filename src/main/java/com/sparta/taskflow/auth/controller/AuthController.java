@@ -1,13 +1,8 @@
 package com.sparta.taskflow.auth.controller;
 
-import com.sparta.taskflow.auth.dto.request.LoginRequestDto;
-import com.sparta.taskflow.auth.dto.request.RegisterRequestDto;
-
-import com.sparta.taskflow.auth.dto.response.TokenResponse;
 import com.sparta.taskflow.auth.service.AuthService;
-
+import com.sparta.taskflow.auth.dto.request.RegisterRequestDto;
 import com.sparta.taskflow.domain.user.dto.request.DeleteUserRequestDto;
-
 import com.sparta.taskflow.domain.user.dto.response.UserResponseDto;
 import com.sparta.taskflow.domain.user.service.UserService;
 import com.sparta.taskflow.response.ApiResponse;
