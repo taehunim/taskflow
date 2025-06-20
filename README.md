@@ -40,7 +40,7 @@
 ## 기능 설계
 
 ### 1. ERD
-![ERD 이미지](![img.png](img.png))
+![ERD 이미지](![ERD.png](ERD.png))
 
 ### 2. API 명세서
 - [API 명세서](https://www.notion.so/teamsparta/2112dc3ef514802ebb01ca0cdb8d166a?v=2112dc3ef51480679a9c000cb6dfb7fe)
@@ -51,7 +51,6 @@
 ### 1. 회원가입/로그인
 - JWT를 활용한 로그인 및 인가 구현
 - Spring Security 기반 보안 설정 적용
-- 인증 필터 및 사용자 역할 기반 권한 분기
 
 ### 2. 태스크(Task) 관리
 - 태스크 생성, 수정, 삭제, 상태 변경 (`TODO` → `IN_PROGRESS` → `DONE`)
