@@ -22,10 +22,10 @@ public class CommentService {
     private final UserRepository userRepository;
 
     // 댓글 생성
-    public CommentResponseDto createComment(CommentRequestDto requestDto, Long taskId) {
+    public CommentResponseDto createComment(CommentRequestDto requestDto, Long taskId, Long loginUserId) {
         Comment comment = Comment.builder()
                                  .content(requestDto.getContent())
-                                 .userId(requestDto.getUserId())
+                                 .userId(loginUserId)
                                  .taskId(taskId)
                                  .build();
 
@@ -68,17 +68,11 @@ public class CommentService {
     }
 
     // 댓글 삭제
-    public void deleteComment(Long commentId, Long taskId) {
-        Comment comment = commentRepository.findByIdAndTaskIdAndIsDeletedFalse(commentId, taskId)
-                                           .orElseThrow(() -> new CustomException(
-                                               ErrorCode.COMMENT_NOT_FOUND));
+    public void deleteComment(Long commentId) {
+        Comment comment = commentRepository.findByIdAndIsDeletedFalse(commentId).orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
 
-        if (!comment.getIsDeleted()) {
+        if (comment.getIsDeleted()) {
             throw new CustomException(ErrorCode.COMMENT_ALREADY_DELETED);
-        }
-
-        if (!comment.getTaskId().equals(taskId)) {
-            throw new CustomException(ErrorCode.COMMENT_TASK_MISMATCH);
         }
 
         comment.softDelete();
