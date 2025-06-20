@@ -16,15 +16,15 @@ import org.springframework.stereotype.Repository;
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
     @Query("""
-    SELECT t 
-    FROM Task t
-    WHERE t.isDeleted = false
-    AND (:status IS NULL OR t.status = :status)
-    AND (:assigneeId IS NULL OR t.assignee.id = :assigneeId)
-    AND (:search IS NULL OR 
-         LOWER(t.title) LIKE LOWER(CONCAT('%', :search, '%')) OR
-         LOWER(t.description) LIKE LOWER(CONCAT('%', :search, '%')))
-    """)
+        SELECT t 
+        FROM Task t
+        WHERE t.isDeleted = false
+        AND (:status IS NULL OR t.status = :status)
+        AND (:assigneeId IS NULL OR t.assignee.id = :assigneeId)
+        AND (:search IS NULL OR 
+             LOWER(t.title) LIKE LOWER(CONCAT('%', :search, '%')) OR
+             LOWER(t.description) LIKE LOWER(CONCAT('%', :search, '%')))
+        """)
     Page<Task> findAllByFilters(
         @Param("status") StatusType status,
         @Param("search") String search,
@@ -33,11 +33,11 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     );
 
     @Query("""
-    SELECT t
-    FROM Task t
-    WHERE t.isDeleted = false
-    AND (t.status = 'TODO' OR t.status = 'IN_PROGRESS')
-    """)
+        SELECT t
+        FROM Task t
+        WHERE t.isDeleted = false
+        AND (t.status = 'TODO' OR t.status = 'IN_PROGRESS')
+        """)
     Page<Task> findTodayTasks(Pageable pageable);
 
     Optional<Task> findByIdAndIsDeletedFalse(Long id);

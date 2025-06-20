@@ -1,7 +1,5 @@
 package com.sparta.taskflow.domain.task.dto.response;
 
-import com.sparta.taskflow.domain.task.entity.Task;
-import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

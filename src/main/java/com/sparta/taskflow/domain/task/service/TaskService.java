@@ -34,13 +34,13 @@ public class TaskService {
     @Transactional
     public CreateTaskResponseDto createTask(CreateTaskRequestDto requestDto) {
 
-
         User assignee = null;
 
         if (requestDto.getAssigneeId() != null) {
             assignee = userRepository.findById(requestDto.getAssigneeId())
                                      .filter(user -> !user.isDeleted())
-                                     .orElseThrow(() -> new CustomException(ErrorCode.ASSIGNEE_NOT_FOUND));
+                                     .orElseThrow(
+                                         () -> new CustomException(ErrorCode.ASSIGNEE_NOT_FOUND));
         }
 
         Task task = Task.builder()
@@ -59,7 +59,8 @@ public class TaskService {
 
     }
 
-    public TaskListResponseDto getTasks(Pageable pageable, StatusType status, String search, Long assigneeId) {
+    public TaskListResponseDto getTasks(Pageable pageable, StatusType status, String search,
+        Long assigneeId) {
 
         Page<Task> taskPage = taskRepository.findAllByFilters(
             status, search, assigneeId, pageable
@@ -69,7 +70,8 @@ public class TaskService {
                                                          .map(TaskResponseDto::of)
                                                          .collect(Collectors.toList());
 
-        return TaskListResponseDto.of(new PageImpl<>(taskResponseDtos, pageable, taskPage.getTotalElements()));
+        return TaskListResponseDto.of(
+            new PageImpl<>(taskResponseDtos, pageable, taskPage.getTotalElements()));
 
     }
 
@@ -89,7 +91,8 @@ public class TaskService {
                                   .orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
 
         User assignee = userRepository.findByIdAndIsDeletedFalse(requestDto.getAssigneeId())
-                                      .orElseThrow(() -> new CustomException(ErrorCode.ASSIGNEE_NOT_FOUND));
+                                      .orElseThrow(
+                                          () -> new CustomException(ErrorCode.ASSIGNEE_NOT_FOUND));
 
         task.update(
             requestDto.getTitle(),
@@ -110,7 +113,7 @@ public class TaskService {
         Task task = taskRepository.findByIdAndIsDeletedFalse(taskId)
                                   .orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
 
-        if (!task.getStatus().canChangeToStatus(newStatus)) {
+        if (task.getStatus() != null && !task.getStatus().canChangeToStatus(newStatus)) {
             throw new CustomException(ErrorCode.INVALID_STATUS_TRANSITION);
         }
 
@@ -140,16 +143,19 @@ public class TaskService {
 
         Map<StatusType, Long> statusCounts = tasks.stream()
                                                   .filter(task -> task.getStatus() != null)
-                                                  .collect(Collectors.groupingBy(Task::getStatus, Collectors.counting()));
+                                                  .collect(Collectors.groupingBy(Task::getStatus,
+                                                      Collectors.counting()));
 
         long doneCount = statusCounts.getOrDefault(StatusType.DONE, 0L);
 
-        double completionRate = totalCount == 0 ? 0.0 : Math.round((doneCount * 10000.0 / totalCount)) / 100.0;
+        double completionRate =
+            totalCount == 0 ? 0.0 : Math.round((doneCount * 10000.0 / totalCount)) / 100.0;
 
         LocalDateTime now = LocalDateTime.now();
         long overdueCount = tasks.stream()
                                  .filter(task -> task.getDueDate() != null)
-                                 .filter(task -> (task.getStatus() == StatusType.TODO || task.getStatus() == StatusType.IN_PROGRESS))
+                                 .filter(task -> (task.getStatus() == StatusType.TODO
+                                     || task.getStatus() == StatusType.IN_PROGRESS))
                                  .filter(task -> task.getDueDate().isBefore(now))
                                  .count();
 
@@ -166,7 +172,8 @@ public class TaskService {
                                                          .map(TaskResponseDto::of)
                                                          .collect(Collectors.toList());
 
-        return TaskListResponseDto.of(new PageImpl<>(taskResponseDtos, pageable, taskPage.getTotalElements()));
+        return TaskListResponseDto.of(
+            new PageImpl<>(taskResponseDtos, pageable, taskPage.getTotalElements()));
 
     }
 
