@@ -1,23 +1,21 @@
 package com.sparta.taskflow.domain.activitylog.dto;
 
-import com.sparta.taskflow.domain.activitylog.Enum.ActivityType;
 import com.sparta.taskflow.domain.activitylog.entity.ActivityLog;
-
 import java.time.LocalDateTime;
 import lombok.Getter;
 
 @Getter
 public class ActivityLogResponseDto {
 
-    private Long id;
-    private Long userId;
-    private String activityType;
-    private Long targetId;
-    private String method;
-    private String url;
-    private String ipAddress;
-    private String content;
-    private LocalDateTime createdAt;
+    private final Long id;
+    private final Long userId;
+    private final String activityType;
+    private final Long targetId;
+    private final String method;
+    private final String url;
+    private final String ipAddress;
+    private final String content;
+    private final LocalDateTime createdAt;
 
     public ActivityLogResponseDto(ActivityLog log) {
         this.id = log.getId();
