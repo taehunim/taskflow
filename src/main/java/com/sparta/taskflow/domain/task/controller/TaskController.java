@@ -17,7 +17,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,13 +38,13 @@ public class TaskController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<CreateTaskResponseDto>> createTask(
-            @Valid @RequestBody CreateTaskRequestDto requestDto
+        @Valid @RequestBody CreateTaskRequestDto requestDto
     ) {
 
         CreateTaskResponseDto responseDto = taskService.createTask(requestDto);
         ApiResponse<CreateTaskResponseDto> response = ApiResponse.success(
-                "Task가 생성되었습니다.",
-                responseDto
+            "Task가 생성되었습니다.",
+            responseDto
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);

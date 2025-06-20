@@ -31,6 +31,10 @@ public class Task extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "assignee_id")
+    private User assignee;
+
     @Column(nullable = false)
     private String title;
 
@@ -42,10 +46,6 @@ public class Task extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private StatusType status;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "assignee_id")
-    private User assignee;
 
     @Column(name = "start_date")
     private LocalDateTime startDate;
@@ -59,7 +59,8 @@ public class Task extends BaseTimeEntity {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    public void update(String title, String description, LocalDateTime dueDate, PriorityType priority,
+    public void update(String title, String description, LocalDateTime dueDate,
+        PriorityType priority,
         StatusType status, User assignee) {
 
         this.title = title;

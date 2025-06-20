@@ -2,9 +2,8 @@ package com.sparta.taskflow.domain.task.dto.request;
 
 import com.sparta.taskflow.domain.task.type.PriorityType;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-
 import java.time.LocalDateTime;
+import lombok.Getter;
 
 @Getter
 public class CreateTaskRequestDto {
