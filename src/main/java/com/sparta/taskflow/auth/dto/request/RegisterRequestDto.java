@@ -11,6 +11,7 @@ import lombok.Getter;
 public class RegisterRequestDto {
 
     @Pattern(regexp = "^[a-zA-Z0-9]{4,20}$", message = "4-20자의 영문과 숫자를 입력하세요.")
+    @NotNull
     private String username;
 
     @Email
@@ -18,6 +19,7 @@ public class RegisterRequestDto {
     private String email;
 
     @ValidPasswordPattern
+    @NotNull
     private String password;
 
     @Size(min = 2, max = 50)
