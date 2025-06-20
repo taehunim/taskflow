@@ -18,23 +18,23 @@ public class ActivityLog {
     private Long id;
 
     @Column(nullable = false)
-    private Long userId; // 활동한 유저 아이디 누가?
+    private Long userId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private ActivityType activityType; // 활동 유형
+    private ActivityType activityType;
 
     @Column(nullable = true, updatable = false)
-    private Long targetId; // 작업, 댓글, 유저 아이디 무엇을?
+    private Long targetId;
 
     @Column(nullable = false, updatable = false)
     private String method;
 
     @Column(nullable = false, updatable = false)
-    private String url; // 요청 URL
+    private String url;
 
     @Column(nullable = false, updatable = false)
-    private String ipAddress; // Ip 주소
+    private String ipAddress;
 
     @Column(columnDefinition = "TEXT", nullable = true, updatable = false)
     private String content;
